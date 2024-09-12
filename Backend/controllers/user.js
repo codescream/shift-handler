@@ -115,14 +115,15 @@ export const updateUser = async (req, res) => {
   const user = await User.findByPk(id);
 
   user
-    .update(...body)
+    .update(body)
     .then(() => {
       console.log(user);
-      updatePassword(body.password, user.email)
-        .then(() =>
-          res.status(200).json({ message: "Password update email sent" })
-        )
-        .catch((err) => res.status(500).json(err.message));
+      // updatePassword(body.password, user.email)
+      //   .then(() =>
+      //     res.status(200).json({ message: "Password update email sent" })
+      //   )
+      //   .catch((err) => res.status(500).json(err.message));
+      res.status(200).json({ message: "user updated successfully" })
     })
     .catch((err) => {
       console.log(err.message);

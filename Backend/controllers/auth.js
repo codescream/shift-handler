@@ -35,9 +35,9 @@ export const login = (req, res) => {
 
         if (decryptPass === body.password) {
           const accessToken = jwt.sign(
-            { id: user.id, username: user.username, role: user.role },
+            { id: user.id, user: { username: user.username, role: user.role } },
             _env.JSONWEBT_KEY,
-            { expiresIn: "1h" }
+            { expiresIn: "5m" }
           );
           const { password, ...data } = user.get();
           res.status(200).json({ ...data, accessToken, message: "logged in!" });

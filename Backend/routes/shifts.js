@@ -1,18 +1,19 @@
 import express from 'express';
 import { clientShifts, create, deleteOne, fetchAll, fetchOne, update } from '../controllers/shift.js';
+import { verifyRole, verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/', create);
+router.post('/', verifyRole, create);
 
-router.get('/', fetchAll);
+router.get('/', verifyToken, fetchAll);
 
-router.get('/:id', fetchOne);
+router.get('/:id', verifyToken, fetchOne);
 
-router.get('/client/:id', clientShifts);
+router.get('/client/:id', verifyToken, clientShifts);
 
-router.patch('/:id', update);
+router.patch('/:id', verifyRole, update);
 
-router.delete('/:id', deleteOne);
+router.delete('/:id', verifyRole, deleteOne);
 
 export default router;
