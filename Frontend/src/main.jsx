@@ -18,6 +18,25 @@ const theme = createTheme({
           }
         }
       }
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiInputBase-input': {
+            color: 'white',
+          },
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#1976d2',
+              borderWidth: "1px",
+            },
+            '&:hover fieldset': {
+              borderColor: '#1976d2',
+              borderWidth: "2px",
+            }
+          }
+        }
+      }
     }
   }
 })

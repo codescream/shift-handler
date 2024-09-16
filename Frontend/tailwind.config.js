@@ -6,7 +6,9 @@ export default {
   ],
   theme: {
     extend: {
-      fontFamily: "Protest Guerrilla",
+      fontFamily: {
+        guerilla: ["Protest Guerrilla", "sans-serif"]
+      }
     },
   },
   plugins: [],
