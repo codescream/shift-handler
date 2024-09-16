@@ -1,11 +1,35 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
-import { AccountSettings, Admin, Home, LandingPage, Login, Report, ResetPassword, Shift, Shifts } from "./pages";
+import { AccountSettings, Admin, LandingPage, Login, Report, ResetPassword, Shift, Shifts } from "./pages";
+import { Footer, Navbar } from "./components";
 
 const App = () => {
+  const Layout = () => {
+   return(
+    <div className="flex flex-col h-screen">
+      <Navbar />
+      <Outlet />
+      <Footer />
+    </div>
+   ) 
+  }
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Home />,
+      element: <Layout />,
+      children: [
+        {
+          path: "landing",
+          element: <LandingPage />,
+        },
+        {
+          path: "login",
+          element: <Login />,
+        },
+        {
+          path: "reset-password",
+          element: <ResetPassword />,
+        }
+      ]
     },
     {
       path: "/shifts",
@@ -30,20 +54,8 @@ const App = () => {
       element: <Admin />,
     },
     {
-      path: "/login",
-      element: <Login />,
-    },
-    {
       path: "/report",
       element: <Report />,
-    },
-    {
-      path: "/landing",
-      element: <LandingPage />,
-    },
-    {
-      path: "reset-password",
-      element: <ResetPassword />,
     }
   ]);
 

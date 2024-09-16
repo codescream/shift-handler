@@ -25,7 +25,7 @@ const Footer = () => {
           <List>
             Socials:
             <ListItem>
-              <Link to={"/about-us"}>
+              <Link to={"/facebook"}>
                 Facebook
               </Link>
             </ListItem>
@@ -34,6 +34,9 @@ const Footer = () => {
             </ListItem>
             <ListItem>
               Instagram
+            </ListItem>
+            <ListItem>
+              LinkedIn
             </ListItem>
           </List>
         </div>
