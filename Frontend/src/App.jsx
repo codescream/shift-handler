@@ -1,16 +1,43 @@
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Link, Outlet, RouterProvider } from "react-router-dom";
 import { AccountSettings, Admin, LandingPage, Login, Report, ResetPassword, Shift, Shifts } from "./pages";
 import { Footer, Navbar } from "./components";
+import { Button } from "@mui/material";
+import AccountLayout from "./components/AccountLayout";
 
 const App = () => {
   const Layout = () => {
    return(
     <div className="flex flex-col h-screen">
-      <Navbar />
+      <Navbar>
+        <Link to={"/login"}>
+          <Button
+            variant="outlined"
+            sx={{
+              backgroundColor: "black",
+              "&:hover": {
+                color: "white",
+              }
+            }}
+          >
+            Login
+          </Button>
+        </Link>
+      </Navbar>
       <Outlet />
       <Footer />
     </div>
    ) 
+  }
+
+  const Account = () => {
+    return (
+      <div className="flex flex-col h-screen gap-4">
+        <Navbar>
+          <AccountLayout />
+        </Navbar>
+        <Outlet />
+      </div>
+    )
   }
   const router = createBrowserRouter([
     {
@@ -18,7 +45,7 @@ const App = () => {
       element: <Layout />,
       children: [
         {
-          path: "landing",
+          path: "",
           element: <LandingPage />,
         },
         {
@@ -32,22 +59,22 @@ const App = () => {
       ]
     },
     {
-      path: "/shifts",
-      element: <Outlet />,
+      path: "/staff",
+      element: <Account />,
       children: [
         {
-          path: "",
+          path: "shifts",
           element: <Shifts />
         },
         {
-          path: ":id",
+          path: "shifts/:id",
           element: <Shift />
+        }, 
+        {
+          path: "account",
+          element: <AccountSettings />,
         }
       ]
-    }, 
-    {
-      path: "/account",
-      element: <AccountSettings />,
     },
     {
       path: "/admin",
