@@ -1,6 +1,6 @@
-import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-const Navbar = () => {
+import PropTypes from "prop-types";
+const Navbar = ({children}) => {
   return (
     <div className="p-3 flex justify-between items-center bg-blue-500 h-[70px]">
       <Link to={"/"}>
@@ -11,21 +11,13 @@ const Navbar = () => {
         />
       </Link>
 
-      <Link to={"/login"}>
-        <Button
-          variant="outlined"
-          sx={{
-            backgroundColor: "black",
-            "&:hover": {
-              color: "white",
-            }
-          }}
-        >
-          Login
-        </Button>
-      </Link>
+      {children}
     </div>
   );
 };
+
+Navbar.propTypes = {
+  children: PropTypes.element
+}
 
 export default Navbar;
