@@ -7,6 +7,7 @@ import Login from "./Login";
 import Report from "./Report";
 import ResetPassword from "./ResetPassword";
 import Shift from "./Shift";
+import AccountHome from "./AccountHome";
 
 export {
   Home,
@@ -17,5 +18,6 @@ export {
   Login,
   Report,
   ResetPassword,
-  Shift
+  Shift,
+  AccountHome
 }
