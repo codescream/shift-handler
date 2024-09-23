@@ -1,8 +1,7 @@
 import { createBrowserRouter, Link, Outlet, RouterProvider } from "react-router-dom";
-import { AccountSettings, Admin, LandingPage, Login, Report, ResetPassword, Shift, Shifts } from "./pages";
+import { AccountHome, AccountSettings, Admin, Home, LandingPage, Login, Report, ResetPassword, Shift, Shifts } from "./pages";
 import { Footer, Navbar } from "./components";
 import { Button } from "@mui/material";
-import AccountLayout from "./components/AccountLayout";
 
 const App = () => {
   const Layout = () => {
@@ -29,16 +28,6 @@ const App = () => {
    ) 
   }
 
-  const Account = () => {
-    return (
-      <div className="flex flex-col h-screen gap-4">
-        <Navbar>
-          <AccountLayout />
-        </Navbar>
-        <Outlet />
-      </div>
-    )
-  }
   const router = createBrowserRouter([
     {
       path: "/",
@@ -60,8 +49,12 @@ const App = () => {
     },
     {
       path: "/staff",
-      element: <Account />,
+      element: <AccountHome />,
       children: [
+        {
+          path: "",
+          element: <Home />
+        },
         {
           path: "shifts",
           element: <Shifts />

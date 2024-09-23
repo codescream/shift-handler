@@ -5,11 +5,17 @@ import Logout from "@mui/icons-material/Logout";
 import SummarizeSharpIcon from "@mui/icons-material/SummarizeSharp";
 import AssignmentSharpIcon from "@mui/icons-material/AssignmentSharp";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-const AccountLayout = () => {
+const AccountOptions = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  const location = useLocation();
+  const curPath = location.pathname;
+
+  const dataToPass = { currentPath: curPath };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -50,7 +56,7 @@ const AccountLayout = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Link to={"/staff/account"}>
+        <Link to={"/staff/account"} state={dataToPass}>
           <MenuItem onClick={handleClose}>
             <Avatar /> Profile
           </MenuItem>
@@ -85,4 +91,4 @@ const AccountLayout = () => {
   );
 };
 
-export default AccountLayout;
+export default AccountOptions;
