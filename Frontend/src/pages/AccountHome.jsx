@@ -3,7 +3,7 @@ import { AccountOptions, Navbar } from "../components"
 
 const AccountHome = () => {
   return (
-    <div className="flex flex-col h-screen gap-4">
+    <div className="w-screen flex flex-col h-screen gap-4">
       <Navbar>
         <AccountOptions />
       </Navbar>

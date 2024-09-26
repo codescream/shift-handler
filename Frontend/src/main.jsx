@@ -47,6 +47,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "white",
+        }
+      }
+    }
   },
 });
 

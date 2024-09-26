@@ -14,7 +14,7 @@ const GoBack = ({ path }) => {
   }, [path, location.pathname]);
 
   return (
-    <div className="w-full">
+    <div className="w-fit">
       <Link to={url ? url : "/"}>
         <Chip
           icon={<ArrowBackIcon />}
