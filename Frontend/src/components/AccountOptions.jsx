@@ -61,12 +61,14 @@ const AccountOptions = () => {
             <Avatar /> Profile
           </MenuItem>
         </Link>
-        <MenuItem onClick={handleClose}>
-          <Avatar>
-            <CalendarMonthSharpIcon />
-          </Avatar>
-          My Shifts
-        </MenuItem>
+        <Link to={"/staff/shifts"} state={dataToPass}>
+          <MenuItem onClick={handleClose}>
+            <Avatar>
+              <CalendarMonthSharpIcon />
+            </Avatar>
+            My Shifts
+          </MenuItem>
+        </Link>
         <Divider />
         <MenuItem onClick={handleClose}>
           <ListItemIcon>

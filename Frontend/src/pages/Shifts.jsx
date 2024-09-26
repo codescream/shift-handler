@@ -1,127 +1,163 @@
-import RemoveRedEyeSharpIcon from "@mui/icons-material/RemoveRedEyeSharp";
-import dayjs from "dayjs";
-import PropTypes from "prop-types";
-import { IconButton } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { GoBack } from "../components";
+import { useLocation } from "react-router-dom";
+
+const columns = [
+  {
+    field: "id",
+    headerName: "ID",
+    minWidth: 90,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "firstName",
+    headerName: "First name",
+    minWidth: 150,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "lastName",
+    headerName: "Last name",
+    minWidth: 150,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "age",
+    headerName: "Age",
+    type: "number",
+    minWidth: 150,
+    flex: 1,
+    align: "center",
+    headerAlign: "center",
+  },
+];
+
+const rows = [
+  { id: 1, lastName: "Snow", firstName: "Jon", age: 14 },
+  { id: 2, lastName: "Lannister", firstName: "Cersei", age: 31 },
+  { id: 3, lastName: "Lannister", firstName: "Jaime", age: 31 },
+  { id: 4, lastName: "Stark", firstName: "Arya", age: 11 },
+  {
+    id: 5,
+    lastName: "Targaryen",
+    firstName: "Daenerys",
+    age: 19,
+    test: "Test",
+  },
+  { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
+  { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
+  { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
+  { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
+];
 
 const Shifts = () => {
-  const myShifts = [
-    {
-      id: 1,
-      date_time: "2024-09-17 14:27:26",
-      address: "123 Main St, Springfield",
-      time_range: "8am - 3pm",
-      duration: "7 hours",
-      status: "Scheduled",
-    },
-    {
-      id: 2,
-      date_time: "2024-09-18 14:27:26",
-      address: "456 Elm St, Springfield",
-      time_range: "9am - 4pm",
-      duration: "7 hours",
-      status: "Completed",
-    },
-    {
-      id: 3,
-      date_time: "2024-09-19 14:27:26",
-      address: "789 Oak St, Springfield",
-      time_range: "10am - 5pm",
-      duration: "7 hours",
-      status: "Pending",
-    },
-    {
-      id: 4,
-      date_time: "2024-09-20 14:27:26",
-      address: "101 Pine St, Springfield",
-      time_range: "11am - 6pm",
-      duration: "7 hours",
-      status: "Cancelled",
-    },
-  ];
-
-  const availShifts = [
-    {
-      id: 5,
-      date_time: "2024-09-21 14:27:26",
-      address: "202 Maple St, Springfield",
-      time_range: "12pm - 7pm",
-      duration: "7 hours",
-      status: "Scheduled",
-    },
-    {
-      id: 6,
-      date_time: "2024-09-22 14:27:26",
-      address: "303 Cedar St, Springfield",
-      time_range: "1pm - 8pm",
-      duration: "7 hours",
-      status: "In Progress",
-    },
-    {
-      id: 7,
-      date_time: "2024-09-23 14:27:26",
-      address: "404 Birch St, Springfield",
-      time_range: "2pm - 9pm",
-      duration: "7 hours",
-      status: "Completed",
-    },
-  ];
-
-  const ShiftCard = ({ shift, type }) => {
-    const color = {
-      owned: "bg-red-600",
-      avail: "bg-gray-700",
-    };
-    return (
-      <div className="flex h-fit ">
-        <div className={`w-[4px] ${color[type]} rounded-l-md`}></div>
-        <div className="flex-1 bg-[#a6d5ee] flex items-center justify-between px-3 text-gray-700">
-          <p className="text-center flex flex-col leading-4">
-            {dayjs(shift.date_time).format("ddd")}
-            <span>{dayjs(shift.date_time).format("DD")}</span>
-          </p>
-          <div className="text-center">
-            <p>{shift.address}</p>
-            <p>{shift.time_range}</p>
-            <p>Duration: {shift.duration}</p>
-          </div>
-          <p>{shift.status}</p>
-          <Link to={`${shift.id}`}>
-            <IconButton
-              aria-label="view shift"
-              sx={{
-                color: "#374151",
-              }}
-            >
-              <RemoveRedEyeSharpIcon />
-            </IconButton>
-          </Link>
-        </div>
-      </div>
-    );
-  };
-
-  ShiftCard.propTypes = {
-    shift: PropTypes.object,
-    type: PropTypes.string
-  }
-
+  const location = useLocation();
+  const { currentPath } = location.state || {};
   return (
-    <div className="w-screen flex flex-col gap-5 items-center">
-      <div className="flex flex-col gap-5 w-4/5">
-        <div className="flex flex-col gap-2 h-fit">
-          <p>My Shifts</p>
-          {myShifts.map((shift) => (
-            <ShiftCard key={shift.id} shift={shift} type={"owned"} />
-          ))}
+    <div className="w-screen flex justify-center">
+      <div className="w-full md:w-3/4 h-fit flex flex-col gap-2">
+        <div className="w-full px-2 md:px-0 flex justify-between items-end">
+          <GoBack path={currentPath} />
+          <p className="w-fit">All Shifts</p>
         </div>
-
-        <div className="flex flex-col gap-2 h-fit">
-          <p>Biddable Shifts</p>
-          {availShifts.map((shift) => (
-            <ShiftCard key={shift.id} shift={shift} type={"avail"} />
-          ))}
-        </div>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 5,
+              },
+            },
+          }}
+          sx={{
+            ".MuiDataGrid-columnSeparator": {
+              display: "none",
+            },
+            ".css-16mfp94-MuiTablePagination-root .MuiTablePagination-selectLabel":
+              {
+                display: "block",
+              },
+            ".css-16mfp94-MuiTablePagination-root": {
+              overflow: "hidden",
+            },
+            ".css-16mfp94-MuiTablePagination-root .MuiTablePagination-input": {
+              display: "block",
+            },
+            ".MuiInputBase-root": {
+              display: "block",
+            },
+            ".MuiDataGrid-selectedRowCount": {
+              display: "block",
+              height: "fit-content",
+              width: "fit-content",
+            },
+            ".css-de9k3v-MuiDataGrid-selectedRowCount": {
+              visibility: "visible",
+            },
+            "@media (max-width: 768px)": {
+              ".MuiDataGrid-footerContainer": {
+                display: "flex",
+                flexDirection: "column",
+              },
+            },
+          }}
+          localeText={{
+            footerRowSelected: (count) => {
+              return (
+                <div className="pt-2 flex md:pt-0 items-center justify-center gap-2 flex-wrap w-fit">
+                  <p>{count} Selected</p>
+                  <div className="flex gap-2">
+                    <Button
+                      sx={{ bgcolor: "red", color: "black" }}
+                      variant="outlined"
+                    >
+                      Del
+                    </Button>
+                    {count < 2 && (
+                      <Button
+                        sx={{ bgcolor: "#1976d2", color: "black" }}
+                        variant="outlined"
+                      >
+                        Edit
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              );
+            },
+          }}
+          // slots={{
+          //   footer: () => (
+          //     <div className="flex-col flex md:flex-row items-center justify-between border-gray-300 border-t-2">
+          //       {/* <GridRowCount localeText  /> */}
+          //       <Box sx={{ pl: 2, display: "flex" }}>Your custom footer stuff</Box>
+          //       <GridPagination sx={{
+          //         width: 'fit-content',
+          //         display: "flex",
+          //         flexDirection: "column",
+          //         overflow: "hidden",
+          //         ".MuiTablePagination-selectLabel": {
+          //           display: "block",
+          //         },
+          //         ".MuiInputBase-root": {
+          //           display: "block",
+          //         }
+          //       }} />
+          //     </div>
+          //   ),
+          // }}
+          pageSizeOptions={[5, 10, 15]}
+          checkboxSelection
+          disableRowSelectionOnClick
+        />
       </div>
     </div>
   );
