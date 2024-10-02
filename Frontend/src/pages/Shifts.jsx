@@ -6,18 +6,69 @@ import { useLocation } from "react-router-dom";
 const handleViewClick = () => {};
 
 const columns = [
-  { field: "id", headerName: "ID", width: 70, align: "center", headerAlign: "center" },
-  { field: "date", headerName: "Date", width: 130, align: "center", headerAlign: "center" },
-  { field: "time", headerName: "Time", width: 130, align: "center", headerAlign: "center" },
-  { field: "location", headerName: "Location", width: 150, align: "center", headerAlign: "center" },
-  { field: "type", headerName: "Type (AM/PM)", width: 100, align: "center", headerAlign: "center" },
-  { field: "range", headerName: "Range (hours)", type: "number", width: 130, align: "center", headerAlign: "center" },
-  { field: "status", headerName: "Status", width: 150, align: "center", headerAlign: "center" },
-  { field: "notes", headerName: "Notes", width: 200, align: "center", headerAlign: "center" },
+  {
+    field: "id",
+    headerName: "ID",
+    width: 70,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "date",
+    headerName: "Date",
+    width: 130,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "time",
+    headerName: "Time",
+    width: 130,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "location",
+    headerName: "Location",
+    width: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "type",
+    headerName: "Type (AM/PM)",
+    width: 100,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "range",
+    headerName: "Range (hours)",
+    type: "number",
+    width: 130,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    width: 150,
+    align: "center",
+    headerAlign: "center",
+  },
+  {
+    field: "notes",
+    headerName: "Notes",
+    width: 200,
+    align: "center",
+    headerAlign: "center",
+  },
   {
     field: "view",
     headerName: "View",
     width: 100,
+    align: "center",
+    headerAlign: "center",
     renderCell: (params) => (
       <Button
         variant="contained"
@@ -194,15 +245,17 @@ const Shifts = () => {
                   <p>{count} Selected</p>
                   <div className="flex gap-2">
                     <Button
-                      sx={{ bgcolor: "red", color: "black" }}
-                      variant="outlined"
+                      color="error"
+                      variant="contained"
+                      size="small"
                     >
                       Del
                     </Button>
                     {count < 2 && (
                       <Button
-                        sx={{ bgcolor: "#1976d2", color: "black" }}
-                        variant="outlined"
+                        color="primary"
+                        variant="contained"
+                        size="small"
                       >
                         Edit
                       </Button>

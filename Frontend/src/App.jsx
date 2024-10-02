@@ -2,8 +2,10 @@ import { createBrowserRouter, Link, Outlet, RouterProvider } from "react-router-
 import { AccountHome, AccountSettings, Admin, Home, LandingPage, Login, Report, ResetPassword, Shift, Shifts } from "./pages";
 import { Footer, Navbar } from "./components";
 import { Button } from "@mui/material";
+import { useState } from "react";
 
 const App = () => {
+  const [authenticated, setAuthenticated] = useState(true);
   const Layout = () => {
    return(
     <div className="flex flex-col h-screen">
@@ -23,7 +25,7 @@ const App = () => {
         </Link>
       </Navbar>
       <Outlet />
-      <Footer />
+      { !authenticated && <Footer /> }
     </div>
    ) 
   }
@@ -66,16 +68,16 @@ const App = () => {
         {
           path: "account",
           element: <AccountSettings />,
+        },
+        {
+          path: "report",
+          element: <Report />,
         }
       ]
     },
     {
       path: "/admin",
       element: <Admin />,
-    },
-    {
-      path: "/report",
-      element: <Report />,
     }
   ]);
 

@@ -80,27 +80,21 @@ const Shift = () => {
       </div>
       <div className="w-full h-20 bg-gray-400 flex items-center justify-between px-2">
         <Button
-          sx={{
-            backgroundColor: "red",
-            color: "black",
-          }}
+          variant="contained"
+          color="error"
         >
           Report
         </Button>
         <div className="flex gap-3">
           <Button
-            sx={{
-              backgroundColor: "green",
-              color: "black",
-            }}
+            variant="contained"
+            color="success"
           >
             Clock In
           </Button>
           <Button
-            sx={{
-              backgroundColor: "#9b9b12",
-              color: "black",
-            }}
+            variant="contained"
+            color="warning"
           >
             Clock Out
           </Button>

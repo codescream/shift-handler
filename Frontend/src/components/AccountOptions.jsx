@@ -70,12 +70,14 @@ const AccountOptions = () => {
           </MenuItem>
         </Link>
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <AssignmentSharpIcon fontSize="small" />
-          </ListItemIcon>
-          Report Incident
-        </MenuItem>
+        <Link to={"/staff/report"} state={dataToPass}>
+          <MenuItem onClick={handleClose}>
+            <ListItemIcon>
+              <AssignmentSharpIcon fontSize="small" />
+            </ListItemIcon>
+            Report Incident
+          </MenuItem>
+        </Link>
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <SummarizeSharpIcon fontSize="small" />
