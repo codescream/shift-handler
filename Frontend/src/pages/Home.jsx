@@ -52,7 +52,7 @@ const Home = () => {
       address: "202 Maple St, Springfield",
       time_range: "12pm - 7pm",
       duration: "7 hours",
-      status: "Scheduled",
+      status: "Open",
     },
     {
       id: 6,
@@ -60,7 +60,7 @@ const Home = () => {
       address: "303 Cedar St, Springfield",
       time_range: "1pm - 8pm",
       duration: "7 hours",
-      status: "In Progress",
+      status: "Open",
     },
     {
       id: 7,
@@ -68,7 +68,7 @@ const Home = () => {
       address: "404 Birch St, Springfield",
       time_range: "2pm - 9pm",
       duration: "7 hours",
-      status: "Completed",
+      status: "Open",
     },
   ];
 
@@ -77,6 +77,8 @@ const Home = () => {
       owned: "bg-red-600",
       avail: "bg-gray-700",
     };
+
+    const owned = type === "avail" ? false : true;
     return (
       <div className="flex h-fit ">
         <div className={`w-[4px] ${color[type]} rounded-l-md`}></div>
@@ -91,7 +93,7 @@ const Home = () => {
             <p>Duration: {shift.duration}</p>
           </div>
           <p>{shift.status}</p>
-          <Link to={`shifts/${shift.id}`} state={dataToPass}>
+          <Link to={`shifts/${shift.id}`} state={{...dataToPass, owned}}>
             <IconButton
               aria-label="view shift"
               sx={{

@@ -63,15 +63,23 @@ const Report = () => {
                 slots={slots}
                 slotProps={{
                   actionBar: {
-                    actions: ['cancel', 'accept'],
+                    actions: ["cancel", "accept"],
                     // OK button is the 'accept' action
                     sx: {
-                      '& .MuiButtonBase-root': {
-                        backgroundColor: '#007BFF', // Default background color for OK button
-                        color: '#fff', // Default text color
-                        '&:hover': {
-                          backgroundColor: '#0056b3', // Hover background color
-                          color: '#f0f0f0', // Hover text color
+                      "& .MuiButtonBase-root:nth-child(even)": {
+                        backgroundColor: "#007BFF", // Default background color for OK button
+                        color: "#fff", // Default text color
+                        "&:hover": {
+                          backgroundColor: "#0056b3", // Hover background color
+                          color: "#f0f0f0", // Hover text color
+                        },
+                      },
+                      "& .MuiButtonBase-root:nth-child(odd)": {
+                        backgroundColor: "red", // Default background color for OK button
+                        color: "#fff", // Default text color
+                        "&:hover": {
+                          backgroundColor: "#cc0e0ef3", // Hover background color
+                          color: "#f0f0f0", // Hover text color
                         },
                       },
                     },
