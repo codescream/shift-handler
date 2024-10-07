@@ -1,5 +1,5 @@
 import Announcements from "./Announcements";
-import Home from "./Home";
+import Layout from "./Layout";
 import Statistics from "./Statistics";
 
-export { Announcements, Statistics, Home };
+export { Announcements, Statistics, Layout };

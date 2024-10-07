@@ -18,7 +18,7 @@ const Navbar = ({children}) => {
 };
 
 Navbar.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.element).isRequired
+  children: PropTypes.object.isRequired,
 }
 
 export default Navbar;
