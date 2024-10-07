@@ -127,12 +127,12 @@ const Shift = () => {
 
   return (
     <div className="w-full p-1 sm:p-0 flex flex-col flex-1 gap-5 items-center">
-      <div className="w-full sm:w-3/4 flex-1 flex flex-col items-center gap-4">
+      <div className={`w-full sm:w-3/4 ${owned ? "lg:w-3/4" : "lg:w-1/2"} flex-1 flex flex-col items-center gap-4`}>
         <div className="w-full">
           <GoBack path={currentPath} />
         </div>
-        <div className="flex flex-col lg:flex-row h-fit w-full gap-4">
-          <div className="w-full lg:w-1/2 bg-blue-300 p-4 rounded-md flex-1 h-fit">
+        <div className="flex flex-col lg:flex-row h-fit w-full gap-4 justify-center">
+          <div className={`bg-blue-300 p-4 rounded-md flex-1 h-fit`}>
             <p>ID:</p>
             <p>Location:</p>
             <p>Date and Time:</p>
