@@ -46,7 +46,7 @@ const Report = () => {
 
   return (
     <div className="flex justify-center w-screen text-black">
-      <div className="px-2 w-3/4">
+      <div className="px-2 w-4/5">
         <div className="w-full flex justify-between items-end text-white">
           <GoBack path={currentPath} />
           <p>Report Incident</p>

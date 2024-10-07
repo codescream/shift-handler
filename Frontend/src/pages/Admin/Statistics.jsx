@@ -41,12 +41,12 @@ const Statistics = () => {
 
   return (
     <div className="flex-1 flex flex-col gap-4 bg-white text-black drop-shadow-xl p-2">
-      <div className="flex w-full justify-between gap-2">
+      <div className="flex w-full justify-between gap-2 flex-wrap">
         {users.map((user, index) => {
           return (
             <div
               key={index}
-              className="flex flex-col shadow p-4 py-6 rounded-md flex-1"
+              className="flex flex-col shadow p-4 py-6 rounded-md flex-1 flex-wrap"
             >
               <p>{user.card}</p>
               <div className="flex gap-4">
