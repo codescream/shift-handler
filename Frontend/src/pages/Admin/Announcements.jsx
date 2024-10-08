@@ -1,7 +1,15 @@
 import DeleteOutlineSharpIcon from "@mui/icons-material/DeleteOutlineSharp";
-import { Button, Dialog, DialogTitle, IconButton } from "@mui/material";
-import ForwardToInboxSharpIcon from '@mui/icons-material/ForwardToInboxSharp';
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import {
+  Box,
+  Button,
+  Collapse,
+  Dialog,
+  DialogTitle,
+  Divider,
+  IconButton,
+} from "@mui/material";
+import ForwardToInboxSharpIcon from "@mui/icons-material/ForwardToInboxSharp";
+import { DataGrid, GridRow, GridToolbar } from "@mui/x-data-grid";
 import PropTypes from "prop-types";
 import { MyTextField } from "../../components";
 import dayjs from "dayjs";
@@ -12,9 +20,9 @@ const NewAnnouncement = (props) => {
 
   const sx = {
     "& .MuiInputBase-input": {
-    color: "black",
-  },
-  }
+      color: "black",
+    },
+  };
 
   NewAnnouncement.propTypes = {
     onClose: PropTypes.func.isRequired,
@@ -22,18 +30,17 @@ const NewAnnouncement = (props) => {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      fullWidth
-    >
+    <Dialog open={open} onClose={onClose} fullWidth>
       <div className="px-8 text-right mb-2">
         <DialogTitle className="text-center">New Announcement</DialogTitle>
         <div className="flex flex-col gap-2 mb-2">
           <MyTextField label="Subject" sx={sx} />
           <MyTextField label="Message" multiline rows={8} sx={sx} />
         </div>
-        <Button variant="contained" className="flex items-center gap-1 h-fit"><p>Send</p><ForwardToInboxSharpIcon fontSize="small" /></Button>
+        <Button variant="contained" className="flex items-center gap-1 h-fit">
+          <p>Send</p>
+          <ForwardToInboxSharpIcon fontSize="small" />
+        </Button>
       </div>
     </Dialog>
   );
@@ -41,6 +48,16 @@ const NewAnnouncement = (props) => {
 
 const Announcements = () => {
   const [open, setOpen] = useState(false);
+  const [expandedRow, setExpandedRow] = useState(null);
+
+  const handleRowClick = (params) => {
+    const rowId = params.id;
+    setExpandedRow((prev) => (prev === rowId ? null : rowId));
+  };
+
+  const deleteAnnouncement = (e) => {
+    e.stopPropagation() ;
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -67,7 +84,7 @@ const Announcements = () => {
       flex: 1,
       align: "right",
       renderCell: () => (
-        <IconButton aria-label="delete">
+        <IconButton aria-label="delete" onClick={deleteAnnouncement}>
           <DeleteOutlineSharpIcon color="error" fontSize="small" />
         </IconButton>
       ),
@@ -184,6 +201,10 @@ const Announcements = () => {
   const sorted = sampleAnnouncements.sort(
     (a, b) => dayjs(b.date_time).valueOf() - dayjs(a.date_time).valueOf()
   );
+
+  Announcements.propTypes = {
+    row: PropTypes.object.isRequired,
+  };
   return (
     <div className="flex flex-col flex-1 bg-white text-black drop-shadow-xl p-2 h-full w-full justify-between overflow-auto">
       <div className="flex h-fit overflow-auto flex-col flex-1 gap-4">
@@ -216,14 +237,43 @@ const Announcements = () => {
             },
             "& .MuiDataGrid-row": {
               bgcolor: "#e2fff5",
-              marginBottom: "15px",
               borderRadius: "5px",
+              cursor: "pointer",
+            },
+            "& .MuiDataGrid-row:not(:first-of-type)": {
+              marginTop: "15px",
             },
           }}
           disableColumnFilter
           disableColumnSelector
           disableDensitySelector
-          slots={{ toolbar: GridToolbar }}
+          slots={{
+            toolbar: (props) => (
+              <div className="flex justify-between items-center">
+                <p className="text-xl">Announcements</p>
+                <GridToolbar {...props} />
+              </div>
+            ),
+            row: (props) => (
+              <>
+                <GridRow {...props} />
+                {expandedRow === props.row.id && (
+                  <Box
+                    sx={{
+                      backgroundColor: "#f0f0f0",
+                      padding: 2,
+                      height: "fit-content",
+                    }}
+                  >
+                    <Divider textAlign="left">Message</Divider>
+                    <Collapse in={expandedRow === props.row.id} timeout={1000}>
+                      {props.row.description}
+                    </Collapse>
+                  </Box>
+                )}
+              </>
+            ),
+          }}
           slotProps={{
             toolbar: {
               showQuickFilter: true,
@@ -231,6 +281,10 @@ const Announcements = () => {
           }}
           // checkboxSelection
           disableRowSelectionOnClick
+          onRowClick={handleRowClick}
+          getRowHeight={(params) => {
+            expandedRow === params.id ? 500 : null;
+          }}
         />
       </div>
       <div className="h-fit p-2 text-right bg-slate-500 rounded-sm">
