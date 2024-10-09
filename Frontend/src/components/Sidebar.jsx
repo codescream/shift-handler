@@ -1,4 +1,5 @@
 import {
+  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -15,12 +16,21 @@ import AnnouncementSharpIcon from "@mui/icons-material/AnnouncementSharp";
 import BarChartSharpIcon from "@mui/icons-material/BarChartSharp";
 import MarkEmailUnreadSharpIcon from "@mui/icons-material/MarkEmailUnreadSharp";
 import DynamicFeedSharpIcon from "@mui/icons-material/DynamicFeedSharp";
+import ArrowCircleLeftSharpIcon from "@mui/icons-material/ArrowCircleLeftSharp";
+import ArrowCircleRightSharpIcon from '@mui/icons-material/ArrowCircleRightSharp';
 import MessageSharpIcon from "@mui/icons-material/MessageSharp";
 import ManageAccountsSharpIcon from "@mui/icons-material/ManageAccountsSharp";
 import ReportSharpIcon from "@mui/icons-material/ReportSharp";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Sidebar = () => {
+  const [open, setOpen] = useState(false);
+
+  const shutSidebar = () => {
+    setOpen(prev => !prev);
+  }
+
   const menus = [
     {
       menuheader: "Dashboard",
@@ -61,52 +71,65 @@ const Sidebar = () => {
     },
   ];
   return (
-    <div className="bg-white w-fit pl-2 px-2 md:px-14 md:pl-2 text-black text-xs">
-      {menus.map((menu, index) => {
-        return (
-          <div key={index} className="mt-3">
-            <p className="text-center md:text-left">{menu.menuheader}</p>
-            <List component="div" disablePadding>
-              {menu.list.map((item, index) => {
-                return (
-                  <Link to={item.label.toLowerCase()} key={index}>
-                    <Tooltip title={item.label} placement="left">
-                      <ListItemButton
-                        sx={{
-                          py: 0,
-                          display: "flex",
-                          gap: "10px",
-                          alignItems: "center",
-                          height: "30px",
-                          justifyContent: "center",
-                        }}
-                      >
-                        <ListItemIcon
+    <div className={`bg-white w-fit min-w-fit ${!open && "md:w-[200px]"} pl-2 px-2 text-black text-xs flex flex-col justify-between items-center`}>
+      <div className="w-fit text-left">
+        {menus.map((menu, index) => {
+          return (
+            <div key={index} className="mt-3 ">
+              <p className={`text-center ${!open && "md:text-left"}`}>{menu.menuheader}</p>
+              <List component="div" disablePadding>
+                {menu.list.map((item, index) => {
+                  return (
+                    <Link to={item.label.toLowerCase()} key={index}>
+                      <Tooltip title={item.label} placement="left">
+                        <ListItemButton
                           sx={{
-                            minWidth: 0,
+                            py: 0,
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "center",
+                            height: "30px",
+                            justifyContent: "center",
                           }}
                         >
-                          {item.icon}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={item.label}
-                          primaryTypographyProps={{
-                            fontSize: 12,
-                            padding: 0,
-                            display: "flex",
-                            justifyItems: "center",
-                          }}
-                          className="hidden md:block"
-                        />
-                      </ListItemButton>
-                    </Tooltip>
-                  </Link>
-                );
-              })}
-            </List>
-          </div>
-        );
-      })}
+                          <ListItemIcon
+                            sx={{
+                              minWidth: 0,
+                            }}
+                          >
+                            {item.icon}
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={item.label}
+                            primaryTypographyProps={{
+                              fontSize: 12,
+                              padding: 0,
+                              display: "flex",
+                              justifyItems: "center",
+                            }}
+                            className={`hidden ${!open && "md:block"}`}
+                          />
+                        </ListItemButton>
+                      </Tooltip>
+                    </Link>
+                  );
+                })}
+              </List>
+            </div>
+          );
+        })}
+      </div>
+      <div className="w-full hidden md:block text-center fixed bottom-0">
+        <IconButton onClick={shutSidebar}>
+          {
+            open ? (
+              <ArrowCircleRightSharpIcon />
+            ) : (
+              <ArrowCircleLeftSharpIcon />
+            )
+          }
+        </IconButton>
+      </div>
     </div>
   );
 };

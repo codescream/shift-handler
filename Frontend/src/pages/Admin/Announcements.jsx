@@ -56,7 +56,7 @@ const Announcements = () => {
   };
 
   const deleteAnnouncement = (e) => {
-    e.stopPropagation() ;
+    e.stopPropagation();
   };
 
   const handleClickOpen = () => {
@@ -260,7 +260,7 @@ const Announcements = () => {
                 {expandedRow === props.row.id && (
                   <Box
                     sx={{
-                      backgroundColor: "#f0f0f0",
+                      backgroundColor: "#c9c8c8",
                       padding: 2,
                       height: "fit-content",
                     }}
@@ -273,6 +273,14 @@ const Announcements = () => {
                 )}
               </>
             ),
+            // footer: (props) => (
+            //   <div className="flex justify-between items-center border-t-2">
+            //     <p>Footer</p>
+            //     <GridFooter {...props} sx={{
+            //       border: "none",
+            //     }} />
+            //   </div>
+            // ),
           }}
           slotProps={{
             toolbar: {
