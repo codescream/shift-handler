@@ -99,7 +99,6 @@ const Shift = () => {
   const { currentPath, owned } = location.state || {};
 
   console.log(currentPath);
-  console.log(owned);
 
   function createData(date_time, case_type, notes) {
     return { date_time, case_type, notes };

@@ -206,7 +206,7 @@ const Announcements = () => {
     row: PropTypes.object.isRequired,
   };
   return (
-    <div className="flex flex-col flex-1 bg-white text-black drop-shadow-xl p-2 h-full w-full justify-between overflow-auto">
+    <div className="adminLayout">
       <div className="flex h-fit overflow-auto flex-col flex-1 gap-4">
         <DataGrid
           rows={sorted}
