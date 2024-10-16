@@ -63,8 +63,145 @@ const clients = [
   }
 ];
 
+export const staffs = [
+  {
+    id: 5001,
+    firstName: "John",
+    lastName: "Doe",
+    username: "Doe5001",
+    email: "john.doe@email.com",
+    phone: "555-123-4567",
+    address: "123 Main St, Cityville, NY, 12345",
+    gender: "Male",
+    password: "password123",
+    role: "user",
+    isActive: true
+  },
+  {
+    id: 5002,
+    firstName: "Jane",
+    lastName: "Smith",
+    username: "Smith5002",
+    email: "jane.smith@email.com",
+    phone: "555-234-5678",
+    address: "456 Elm St, Townsville, CA, 67890",
+    gender: "Female",
+    password: "password456",
+    role: "user",
+    isActive: true
+  },
+  {
+    id: 5003,
+    firstName: "Robert",
+    lastName: "Johnson",
+    username: "Johnson5003",
+    email: "robert.johnson@email.com",
+    phone: "555-345-6789",
+    address: "789 Oak St, Villagetown, TX, 54321",
+    gender: "Male",
+    password: "password789",
+    role: "user",
+    isActive: true
+  },
+  {
+    id: 5004,
+    firstName: "Emily",
+    lastName: "Brown",
+    username: "Brown5004",
+    email: "emily.brown@email.com",
+    phone: "555-456-7890",
+    address: "135 Pine St, Suburbia, FL, 67891",
+    gender: "Female",
+    password: "password321",
+    role: "user",
+    isActive: false
+  },
+  {
+    id: 5005,
+    firstName: "Michael",
+    lastName: "Davis",
+    username: "Davis5005",
+    email: "michael.davis@email.com",
+    phone: "555-567-8901",
+    address: "357 Cedar St, Metropolis, IL, 12346",
+    gender: "Male",
+    password: "password654",
+    role: "user",
+    isActive: true
+  },
+  {
+    id: 5006,
+    firstName: "Sarah",
+    lastName: "Wilson",
+    username: "Wilson5006",
+    email: "sarah.wilson@email.com",
+    phone: "555-678-9012",
+    address: "159 Birch St, Capitol City, CO, 23456",
+    gender: "Female",
+    password: "password987",
+    role: "user",
+    isActive: true
+  },
+  {
+    id: 5007,
+    firstName: "David",
+    lastName: "Martinez",
+    username: "Martinez5007",
+    email: "david.martinez@email.com",
+    phone: "555-789-0123",
+    address: "753 Willow St, Hillside, GA, 78912",
+    gender: "Male",
+    password: "password321",
+    role: "user",
+    isActive: false
+  },
+  {
+    id: 5008,
+    firstName: "Laura",
+    lastName: "Garcia",
+    username: "Garcia5008",
+    email: "laura.garcia@email.com",
+    phone: "555-890-1234",
+    address: "951 Maple St, Coastal City, NJ, 98765",
+    gender: "Female",
+    password: "password1234",
+    role: "admin",
+    isActive: true
+  },
+  {
+    id: 5009,
+    firstName: "Kevin",
+    lastName: "Anderson",
+    username: "Anderson5009",
+    email: "kevin.anderson@email.com",
+    phone: "555-901-2345",
+    address: "111 Spruce St, Mountainview, WA, 87654",
+    gender: "Male",
+    password: "password6543",
+    role: "admin",
+    isActive: true
+  },
+  {
+    id: 5010,
+    firstName: "Megan",
+    lastName: "Taylor",
+    username: "Taylor5010",
+    email: "megan.taylor@email.com",
+    phone: "555-012-3456",
+    address: "222 Ash St, Riverside, OR, 34567",
+    gender: "Female",
+    password: "password0987",
+    role: "user",
+    isActive: true
+  }
+];
+
 const getClient = (id) => {
   return clients.filter(client => client.id === id)[0];
+}
+
+const getStaff = (id) => {
+  return staffs.filter(staff => staff.id === id)[0];
 }
 
 export const shifts = [
@@ -76,18 +213,18 @@ export const shifts = [
     type: "AM",
     duration: 8,
     client: getClient(1001),   
-    staffId: 5001,
+    staffId: getStaff(5001).username,
     amount: 150.0,
     paid: 150.0,
     status: "closed",
     notes: [
       {
-        staffId: 5001,
+        staffId: getStaff(5001).username,
         note: "Shift started on time.",
         datetime: "2024-10-09T08:00:00"
       },
       {
-        staffId: 5001,
+        staffId: getStaff(5001).username,
         note: "Client requested additional tasks.",
         datetime: "2024-10-09T12:00:00"
       }
@@ -115,7 +252,7 @@ export const shifts = [
     type: "PM",
     duration: 6,
     client: getClient(1002),
-    staffId: 5002,
+    staffId: getStaff(5002).username,
     amount: 120.0,
     paid: 0.0,
     status: "open",
@@ -131,13 +268,13 @@ export const shifts = [
     type: "AM",
     duration: 8,
     client: getClient(1003),
-    staffId: 5003,
+    staffId: getStaff(5003).username,
     amount: 160.0,
     paid: 160.0,
     status: "finished",
     notes: [
       {
-        staffId: 5003,
+        staffId: getStaff(5003).username,
         note: "Arrived early and completed tasks ahead of time.",
         datetime: "2024-10-11T08:00:00"
       }
@@ -165,13 +302,13 @@ export const shifts = [
     type: "PM",
     duration: 4,
     client: getClient(1004),
-    staffId: 5004,
+    staffId: getStaff(5004).username,
     amount: 80.0,
     paid: 0.0,
     status: "ongoing",
     notes: [
       {
-        staffId: 5004,
+        staffId: getStaff(5004).username,
         note: "Client requested a longer shift. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam at earum similique quibusdam. Quos ratione nostrum odit consequatur nihil vitae repellendus pariatur suscipit, corrupti quis facere rem officiis voluptate modi!",
         datetime: "2024-10-12T02:30:00"
       }
@@ -193,13 +330,13 @@ export const shifts = [
     type: "AM",
     duration: 6,
     client: getClient(1005),
-    staffId: 5005,
+    staffId: getStaff(5005).username,
     amount: 120.0,
     paid: 120.0,
     status: "closed",
     notes: [
       {
-        staffId: 5005,
+        staffId: getStaff(5005).username,
         note: "Smooth shift, no issues.",
         datetime: "2024-10-13T09:15:00"
       }
@@ -227,7 +364,7 @@ export const shifts = [
     type: "AM",
     duration: 10,
     client: getClient(1006),
-    staffId: 5006,
+    staffId: getStaff(5006).username,
     amount: 200.0,
     paid: 0.0,
     status: "open",
@@ -243,13 +380,13 @@ export const shifts = [
     type: "PM",
     duration: 5,
     client: getClient(1007),
-    staffId: 5007,
+    staffId: getStaff(5007).username,
     amount: 100.0,
     paid: 100.0,
     status: "finished",
     notes: [
       {
-        staffId: 5007,
+        staffId: getStaff(5007).username,
         note: "Finished tasks early, client happy.",
         datetime: "2024-10-15T07:00:00"
       }
@@ -277,13 +414,13 @@ export const shifts = [
     type: "PM",
     duration: 7,
     client: getClient(1008),
-    staffId: 5008,
+    staffId: getStaff(5008).username,
     amount: 140.0,
     paid: 0.0,
     status: "ongoing",
     notes: [
       {
-        staffId: 5008,
+        staffId: getStaff(5008).username,
         note: "Client requested help with equipment.",
         datetime: "2024-10-16T12:30:00"
       }
@@ -305,7 +442,7 @@ export const shifts = [
     type: "AM",
     duration: 8,
     client: getClient(1009),
-    staffId: 5009,
+    staffId: getStaff(5009).username,
     amount: 160.0,
     paid: 0.0,
     status: "open",
@@ -321,13 +458,13 @@ export const shifts = [
     type: "AM",
     duration: 8,
     client: getClient(1010),
-    staffId: 5010,
+    staffId: getStaff(5010).username,
     amount: 160.0,
     paid: 160.0,
     status: "closed",
     notes: [
       {
-        staffId: 5010,
+        staffId: getStaff(5010).username,
         note: "Client happy with performance.",
         datetime: "2024-10-18T02:00:00"
       }

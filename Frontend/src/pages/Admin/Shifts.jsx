@@ -236,7 +236,7 @@ const Shifts = () => {
               </>
             ),
             footer: (props) => (
-              <div className="flex gap-2 justify-center md:justify-between items-center px-2 flex-col lg:flex-row">
+              <div className="flex gap-2 justify-center md:justify-between items-center px-2 flex-col lg:flex-row border-t-2">
                 {selectedRows > 0 && (
                   <div className="flex gap-2 flex-1 items-center mt-5 lg:mt-0">
                     <p>{selectedRows} Selected</p>
@@ -296,7 +296,7 @@ const Shifts = () => {
             },
           }}
           hideFooterSelectedRowCount
-          disableColumnFilter
+          // disableColumnFilter
           disableColumnSelector
           disableDensitySelector
           pageSizeOptions={[5, 10, 15]}
