@@ -18,7 +18,7 @@ import {
 import { Footer, Navbar } from "./components";
 import { Button } from "@mui/material";
 import { useState } from "react";
-import { Announcements, Statistics, Layout as AdminLayout, Shifts as AdminShifts, Staffs } from "./pages/Admin";
+import { Announcements, Statistics, Layout as AdminLayout, Shifts as AdminShifts, Staffs, Clients } from "./pages/Admin";
 
 const App = () => {
   const [authenticated, setAuthenticated] = useState(true);
@@ -114,6 +114,10 @@ const App = () => {
         {
           path: "staffs",
           element: <Staffs />
+        },
+        {
+          path: "clients",
+          element: <Clients />
         }
       ],
     },

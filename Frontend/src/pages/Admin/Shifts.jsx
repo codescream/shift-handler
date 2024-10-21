@@ -2,7 +2,14 @@ import { DataGrid, GridFooter, GridRow, GridToolbar } from "@mui/x-data-grid";
 import { PropTypes } from "prop-types";
 import { shifts } from "./index";
 import { useState } from "react";
-import { Button, Divider } from "@mui/material";
+import {
+  Button,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "@mui/material";
 import dayjs from "dayjs";
 
 const Shifts = () => {
@@ -137,7 +144,7 @@ const Shifts = () => {
 
   return (
     <div className="adminLayout">
-      <div className="flex overflow flex-col flex-1 gap-4 w-full">
+      <div className="flex flex-col flex-1 gap-4 w-full">
         <DataGrid
           rows={shifts}
           columns={cols}
@@ -149,11 +156,10 @@ const Shifts = () => {
             },
           }}
           onRowSelectionModelChange={(rows, details) => {
-            
-            if(rows.length === 1) {
-              setSelectedRow(details.api.getRowParams(rows[0]).row)
+            if (rows.length === 1) {
+              setSelectedRow(details.api.getRowParams(rows[0]).row);
             }
-             
+
             setSelectedRows(rows.length);
           }}
           slots={{
@@ -178,7 +184,7 @@ const Shifts = () => {
                     // }}
                     className="p-4 h-fit w-full bg-[#c9c8c8]"
                   >
-                    <div className="w-96 md:w-full">
+                    <div className="w-fit sticky left-4">
                       <Divider textAlign="left" className="md:w-full">
                         Assigned Staff
                       </Divider>
@@ -212,23 +218,36 @@ const Shifts = () => {
                       <Divider textAlign="left" className="md:w-full">
                         Notes
                       </Divider>
-                      <div className="h-24 overflow-auto w-fit md:w-1/2 px-2">
-                        {props.row.notes?.map((note, i) => {
-                          return (
-                            <div
-                              key={i}
-                              className="flex justify-between gap-2 pt-2 w-full"
-                            >
-                              <p>{note.staffId}:</p>
-                              <p className="flex-1">{note.note}</p>
-                              <p className="flex-1">
-                                {dayjs(note.datetime).format(
-                                  "YYYY-MM-DD h:mma"
-                                )}
-                              </p>
-                            </div>
-                          );
-                        })}
+                      <div className="h-24 overflow-auto w-fit px-2 min-w-96">
+                        <Table className="w-fit">
+                          <TableBody>
+                            {props.row.notes?.map((note, i) => {
+                              return (
+                                <TableRow
+                                  key={i}
+                                  className="flex"
+                                  sx={{
+                                    "&:last-child td, &:last-child th": {
+                                      border: 0,
+                                    },
+                                  }}
+                                >
+                                  <TableCell component="th" scope="row">
+                                    {note.staffId}:
+                                  </TableCell>
+                                  <TableCell align="left" className="w-[250px]">
+                                    {note.note}
+                                  </TableCell>
+                                  <TableCell align="left">
+                                    {dayjs(note.datetime).format(
+                                      "YYYY-MM-DD h:mma"
+                                    )}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
                       </div>
                     </div>
                   </div>
@@ -240,11 +259,16 @@ const Shifts = () => {
                 {selectedRows > 0 && (
                   <div className="flex gap-2 flex-1 items-center mt-5 lg:mt-0">
                     <p>{selectedRows} Selected</p>
-                    {(selectedRows > 1 || ["finished", "closed"].includes(selectedRow.status)) || (
-                      <Button color="primary" variant="contained" size="small">
-                        Edit
-                      </Button>
-                    )}
+                    {selectedRows > 1 ||
+                      ["finished", "closed"].includes(selectedRow.status) || (
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          size="small"
+                        >
+                          Edit
+                        </Button>
+                      )}
                     <Button color="error" variant="contained" size="small">
                       Del
                     </Button>
@@ -283,11 +307,12 @@ const Shifts = () => {
               {
                 display: "block",
               },
-              ".MuiInputBase-root > .css-16mfp94-MuiTablePagination-root, .MuiTablePagination-selectLabel": {
-              display: "block",
-            },
+            ".MuiInputBase-root > .css-16mfp94-MuiTablePagination-root, .MuiTablePagination-selectLabel":
+              {
+                display: "block",
+              },
             "& .MuiDataGrid-footerContainer": {
-              border: "none"
+              border: "none",
             },
             "& .MuiDataGrid-row": {
               bgcolor: "#e2fff5",

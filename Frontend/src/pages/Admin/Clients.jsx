@@ -1,37 +1,37 @@
+import { Button } from "@mui/material";
 import { DataGrid, GridFooter, GridToolbar } from "@mui/x-data-grid";
 import Switch from "@mui/material/Switch";
-import { staffs } from ".";
+import { clients } from ".";
 import { useState } from "react";
-import { Button } from "@mui/material";
 
-const Staffs = () => {
+const Clients = () => {
   const [selectedRows, setSelectedRows] = useState(0);
-  const [allStaffs, setAllStaffs] = useState(staffs);
+  const [allClients, setAllClients] = useState(clients);
   const [selectedRow, setSelectedRow] = useState({});
 
   const switchStatus = (e, row) => {
-    const updatedStaffs = allStaffs.map(staff => staff.id === row.id ? { ...staff, isActive: e.target.checked } : staff);
-    setAllStaffs(updatedStaffs);
-    setSelectedRow(updatedStaffs.find(staff => staff.id === row.id));
+    const updatedStaffs = allClients.map((staff) =>
+      staff.id === row.id ? { ...staff, isActive: e.target.checked } : staff
+    );
+    setAllClients(updatedStaffs);
+    setSelectedRow(updatedStaffs.find((staff) => staff.id === row.id));
   };
 
   const cols = [
-    { field: "id", headerName: "ID", align: "center", headerAlign: "center" },
     {
-      field: "firstName",
-      headerName: "First Name",
+      field: "id",
+      headerName: "ID",
       align: "center",
       headerAlign: "center",
       flex: 1,
-      minWidth: 150,
     },
     {
-      field: "lastName",
-      headerName: "Last Name",
+      field: "name",
+      headerName: "Name",
       align: "center",
       headerAlign: "center",
       flex: 1,
-      minWidth: 150,
+      minWidth: 200
     },
     {
       field: "email",
@@ -39,7 +39,7 @@ const Staffs = () => {
       align: "center",
       headerAlign: "center",
       flex: 1,
-      minWidth: 200,
+      minWidth: 200
     },
     {
       field: "phone",
@@ -47,15 +47,7 @@ const Staffs = () => {
       align: "center",
       headerAlign: "center",
       flex: 1,
-      minWidth: 200,
-    },
-    {
-      field: "role",
-      headerName: "Role",
-      align: "center",
-      headerAlign: "center",
-      flex: 1,
-      minWidth: 100,
+      minWidth: 150
     },
     {
       field: "address",
@@ -63,7 +55,7 @@ const Staffs = () => {
       align: "center",
       headerAlign: "center",
       flex: 1,
-      minWidth: 200,
+      minWidth: 500
     },
     {
       field: "isActive",
@@ -71,7 +63,7 @@ const Staffs = () => {
       align: "center",
       headerAlign: "center",
       flex: 1,
-      minWidth: 200,
+      minWidth: 100,
       renderCell: (params) => (
         <Switch
           inputProps={{
@@ -87,9 +79,9 @@ const Staffs = () => {
 
   return (
     <div className="adminLayout">
-      <div className="flex flex-col flex-1 gap-4 w-full">
+      <div className="flex flex-col flex-1 w-full">
         <DataGrid
-          rows={allStaffs}
+          rows={allClients}
           columns={cols}
           initialState={{
             pagination: {
@@ -126,7 +118,7 @@ const Staffs = () => {
           slots={{
             toolbar: (props) => (
               <div className="flex justify-between items-center">
-                <p className="text-xl pl-1">Staffs</p>
+                <p className="text-xl pl-1">Clients</p>
                 <GridToolbar {...props} />
               </div>
             ),
@@ -162,4 +154,4 @@ const Staffs = () => {
   );
 };
 
-export default Staffs;
+export default Clients;
