@@ -1,65 +1,85 @@
 
 
-const clients = [
+export const clients = [
   {
     id: 1001,
     name: "John Doe",
     phone: "123-456-7890",
-    email: "johndoe@example.com"
+    email: "johndoe@example.com",
+    address: "222 Ash St, Riverside, OR, 34567",
+    isActive: true,
   },
   {
     id: 1002,
     name: "Jane Smith",
     phone: "987-654-3210",
-    email: "janesmith@example.com"
+    email: "janesmith@example.com",
+    address: "111 Spruce St, Mountainview, WA, 87654",
+    isActive: true,
   },
   {
     id: 1003,
     name: "Alice Johnson",
     phone: "555-555-5555",
-    email: "alicejohnson@example.com"
+    email: "alicejohnson@example.com",
+    address: "333 Oak St, Los Angeles, CA, 90123",
+    isActive: false,
   },
   {
     id: 1004,
     name: "Bob Brown",
     phone: "777-777-7777",
-    email: "bobbrown@example.com"
+    email: "bobbrown@example.com",
+    address: "444 Maple St, San Francisco, CA, 94123",
+    isActive: true,
   },
   {
     id: 1005,
     name: "Charlie Wilson",
     phone: "333-333-3333",
-    email: "charliewilson@example.com"
+    email: "charliewilson@example.com",
+    address: "555 Birch St, Seattle, WA, 98765",
+    isActive: true,
   },
   {
     id: 1006,
     name: "David Davis",
     phone: "222-222-2222",
-    email: "daviddavis@example.com"
+    email: "daviddavis@example.com",
+    address: "666 Oak St, Portland, OR, 97212",
+    isActive: false,
   },
   {
     id: 1007,
     name: "Emily Thompson",
     phone: "111-111-1111",
-    email: "emilythompson@example.com"
+    email: "emilythompson@example.com",
+    address: "777 Birch St, San Francisco, CA, 94123",
+    isActive: true,
   },
   {
     id: 1008,
     name: "Frank Garcia",
     phone: "444-444-4444",
-    email: "frankgarcia@example.com"
+    email: "frankgarcia@example.com",
+    address: "888 Oak St, Seattle, WA, 98765",
+    isActive: true,
   },
   {
     id: 1009,
     name: "Grace Wilson",
     phone: "666-666-6666",
-    email: "gracewilson@example.com"
+    email: "gracewilson@example.com",
+    address: "999 Oak St, Los Angeles, CA, 90123",
+    isActive: false,
   },
   {
     id: 1010,
     name: "Harry Lee",
     phone: "888-888-8888",
-    email: "harrylee@example.com"
+    email: "harrylee@example.com",
+    address: "101 Pine St, Springfield",
+    isActive: true,
   }
 ];
 
