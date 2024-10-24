@@ -1,21 +1,234 @@
 import { DataGrid, GridFooter, GridRow, GridToolbar } from "@mui/x-data-grid";
 import { PropTypes } from "prop-types";
-import { shifts } from "./index";
+import { shifts, staffs } from "./index";
 import { useState } from "react";
 import {
   Button,
+  Dialog,
+  DialogTitle,
   Divider,
+  MenuItem,
   Table,
   TableBody,
   TableCell,
   TableRow,
+  TextField,
 } from "@mui/material";
 import dayjs from "dayjs";
+import { clients } from "./index";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { MyTextField } from "../../components";
+
+const NewShift = (props) => {
+  const { open, onClose } = props;
+  const [client, setClient] = useState("");
+  const [type, setType] = useState("");
+  const [status, setStatus] = useState("");
+  const [staff, setStaff] = useState("");
+  const [time, setTime] = useState(null);
+
+  const color = {
+    ".MuiInputBase-input": {
+      color: "black",
+    },
+  };
+
+  const slots = {
+    textField: (params) => (
+      <TextField
+        {...params}
+        size="small" // This makes the DatePicker's input field small
+        focused
+        sx={color}
+      />
+    ),
+  };
+
+  const createShift = (e) => {
+    e.preventDefault();
+    alert("Create Shift");
+  };
+
+  const sx = {
+    "& .MuiInputBase-input": {
+      color: "black",
+    },
+  };
+
+  NewShift.propTypes = {
+    onClose: PropTypes.func.isRequired,
+    open: PropTypes.bool,
+  };
+
+  return (
+    <Dialog open={open} onClose={onClose} fullWidth>
+      <DialogTitle className="text-center">New Shift</DialogTitle>
+      <form className="px-8 mb-2" onSubmit={createShift}>
+        <div className="flex gap-2 mb-2">
+          <MyTextField
+            label="Client"
+            required
+            select
+            onChange={(e) => setClient(e.target.value)}
+            value={client}
+            className="flex-1"
+            sx={sx}
+          >
+            {clients.map((client) => (
+              <MenuItem key={client.id} value={client.name}>
+                {client.name}
+              </MenuItem>
+            ))}
+          </MyTextField>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Shift Date"
+              slots={slots}
+              className="flex-1"
+              slotProps={{
+                textField: {
+                  required: true,
+                },
+              }}
+            />
+            <TimePicker
+              label="Shift Time"
+              slots={slots}
+              className="flex-1"
+              value={time}
+              slotProps={{
+                actionBar: {
+                  actions: ["cancel", "accept"],
+                  // OK button is the 'accept' action
+                  sx: {
+                    "& .MuiButtonBase-root:nth-of-type(even)": {
+                      backgroundColor: "#007BFF", // Default background color for OK button
+                      color: "#fff", // Default text color
+                      "&:hover": {
+                        backgroundColor: "#0056b3", // Hover background color
+                        color: "#f0f0f0", // Hover text color
+                      },
+                    },
+                    "& .MuiButtonBase-root:nth-of-type(odd)": {
+                      backgroundColor: "red", // Default background color for OK button
+                      color: "#fff", // Default text color
+                      "&:hover": {
+                        backgroundColor: "#cc0e0ef3", // Hover background color
+                        color: "#f0f0f0", // Hover text color
+                      },
+                    },
+                  },
+                },
+                textField: {
+                  required: true,
+                },
+              }}
+            />
+          </LocalizationProvider>
+          {/* <MyTextField label="Subject" sx={sx} />
+          <MyTextField label="Message" multiline rows={8} sx={sx} /> */}
+        </div>
+        <div className="flex gap-2 mb-2">
+          <MyTextField
+            label="Type"
+            value={type}
+            select
+            onChange={(e) => setType(e.target.value)}
+            sx={sx}
+            className="flex-1"
+            required
+          >
+            <MenuItem value="AM">AM</MenuItem>
+            <MenuItem value="PM">PM</MenuItem>
+          </MyTextField>
+          <MyTextField
+            className="flex-1"
+            type="number"
+            label="Duration"
+            required
+            sx={sx}
+          />
+          <MyTextField
+            className="flex-1"
+            type="number"
+            label="Amount"
+            required
+            sx={sx}
+          />
+        </div>
+        <div className="flex gap-2 mb-2">
+          <MyTextField
+            value={staff}
+            label="Staff"
+            className="flex-1"
+            sx={sx}
+            select
+            onChange={(e) => {
+              setStaff(e.target.value);
+              e.target.value ? setStatus("filled") : setStatus("");
+            }}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {staffs.map((staff) => (
+              <MenuItem
+                key={staff.id}
+                value={`${staff.firstName} ${staff.lastName}`}
+              >
+                {`${staff.firstName} ${staff.lastName}`}
+              </MenuItem>
+            ))}
+          </MyTextField>
+          <MyTextField
+            value={status}
+            label="Status"
+            sx={sx}
+            select
+            className="flex-1"
+            onChange={(e) => setStatus(e.target.value)}
+            required
+          >
+            <MenuItem value="open">Open</MenuItem>
+            <MenuItem value="filled">Filled</MenuItem>
+            <MenuItem value="ongoing">Ongoing</MenuItem>
+            <MenuItem value="closed">Closed</MenuItem>
+            <MenuItem value="finished">Finished</MenuItem>
+          </MyTextField>
+        </div>
+        <div className="flex gap-2 mb-2">
+          <MyTextField label="Notes" multiline fullWidth rows={5} sx={sx} />
+        </div>
+        <div className="text-right">
+          <Button
+            type="submit"
+            variant="contained"
+            className="flex items-center gap-1 h-fit"
+          >
+            <p>Create</p>
+          </Button>
+        </div>
+      </form>
+    </Dialog>
+  );
+};
 
 const Shifts = () => {
   const [expandedRow, setExpandedRow] = useState(null);
   const [selectedRows, setSelectedRows] = useState(0);
   const [selectedRow, setSelectedRow] = useState({});
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const cols = [
     {
@@ -330,6 +543,12 @@ const Shifts = () => {
           onRowClick={handleRowClick}
         />
       </div>
+      <div className="h-fit p-2 text-right bg-slate-500 rounded-sm">
+        <Button variant="contained" onClick={handleClickOpen}>
+          New Shift
+        </Button>
+      </div>
+      <NewShift open={open} onClose={handleClose} />
     </div>
   );
 };
