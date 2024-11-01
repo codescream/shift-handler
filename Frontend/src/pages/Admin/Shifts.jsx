@@ -1,8 +1,11 @@
 import { DataGrid, GridFooter, GridRow, GridToolbar } from "@mui/x-data-grid";
 import { PropTypes } from "prop-types";
 import { shifts, staffs } from "./index";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Button,
   Dialog,
   DialogTitle,
@@ -14,21 +17,116 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import dayjs from "dayjs";
 import { clients } from "./index";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import {
+  GoogleMap,
+  useJsApiLoader,
+  useGoogleMap,
+} from "@react-google-maps/api";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MyTextField } from "../../components";
 
+const containerStyle = {
+  width: "100%",
+  height: "400px",
+};
+
+// const center = {
+//   lat: 43.6319, // Example coordinates for San Francisco
+//   lng: -79.3716,
+// };
+
+const CustomMarker = ({ position }) => {
+  const map = useGoogleMap();
+
+  console.log(position);
+
+  CustomMarker.propTypes = {
+    position: PropTypes.object.isRequired,
+  };
+
+  useEffect(() => {
+    let marker;
+
+    const loadMarkerLibrary = async () => {
+      if (map && position) {
+        // Dynamically import the marker library
+        const { AdvancedMarkerElement } =
+          await window.google.maps.importLibrary("marker");
+
+        // const iconDiv = document.createElement('div');
+        // iconDiv.style.width = '40px';
+        // iconDiv.style.height = '40px';
+        // iconDiv.style.backgroundImage = 'url("https://maps.google.com/mapfiles/ms/icons/blue-dot.png")'; // Replace with your icon URL
+        // // iconDiv.innerHTML = "📍"; // specify an html element
+        // // iconDiv.style.backgroundColor = "white";
+        // iconDiv.style.backgroundSize = 'cover';
+        // iconDiv.style.borderRadius = '50%';
+
+        marker = new AdvancedMarkerElement({
+          position,
+          map,
+          // content: iconDiv
+        });
+      }
+    };
+
+    loadMarkerLibrary();
+
+    return () => {
+      if (marker) {
+        marker.map = null; // Remove marker on unmount
+      }
+    };
+  }, [map, position]);
+
+  return null;
+};
+
 const NewShift = (props) => {
-  const { open, onClose } = props;
-  const [client, setClient] = useState("");
-  const [type, setType] = useState("");
-  const [status, setStatus] = useState("");
-  const [staff, setStaff] = useState("");
-  const [time, setTime] = useState(null);
+  const { open, onClose, row, edit } = props;
+  const [formData, setFormData] = useState(row);
+  const [isMapVisible, setIsMapVisible] = useState(false);
+  // const [currentPosition, setCurrentPosition] = useState(center)
+
+  // useEffect(() => {
+  //   // Fetch the user's current position
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       (position) => {
+  //         setCurrentPosition({
+  //           lat: position.coords.latitude,
+  //           lng: position.coords.longitude
+  //         });
+  //       },
+  //       () => alert('Geolocation is not supported by this browser.')
+  //     );
+  //   }
+  // }, []);
+
+  // Load the Google Maps JavaScript API
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY, // Replace with your API key
+  });
+
+  const handleAccordionChange = (panel) => (event, isExpanded) => {
+    setIsMapVisible(isExpanded ? panel : false);
+  };
+
+  console.log(formData);
+  // console.log(row);
+
+  // Cleanup function when the map is unmounted
+  // const handleMapUnmount = useCallback((map) => {
+  //   console.log("Map is unmounted", map);
+  //   // Nullify map instance and perform additional cleanup
+  //   map = null;
+  // }, []);
 
   const color = {
     ".MuiInputBase-input": {
@@ -61,25 +159,35 @@ const NewShift = (props) => {
   NewShift.propTypes = {
     onClose: PropTypes.func.isRequired,
     open: PropTypes.bool,
+    edit: PropTypes.bool,
+    row: PropTypes.object,
   };
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle className="text-center">New Shift</DialogTitle>
+      <DialogTitle className="text-center">
+        {edit ? "Edit " : "New"} Shift
+      </DialogTitle>
       <form className="px-8 mb-2" onSubmit={createShift}>
         <div className="flex gap-2 mb-2">
           <MyTextField
             label="Client"
             required
+            name="client"
             select
-            onChange={(e) => setClient(e.target.value)}
-            value={client}
+            onChange={(e) =>
+              setFormData({
+                ...row,
+                client: { ...row.client, name: e.target.value },
+              })
+            }
+            value={`${row?.client?.name}`}
             className="flex-1"
             sx={sx}
           >
             {clients.map((client) => (
               <MenuItem key={client.id} value={client.name}>
-                {client.name}
+                {client?.name}
               </MenuItem>
             ))}
           </MyTextField>
@@ -87,6 +195,8 @@ const NewShift = (props) => {
             <DatePicker
               label="Shift Date"
               slots={slots}
+              value={dayjs(row.date)}
+              name="date"
               className="flex-1"
               slotProps={{
                 textField: {
@@ -98,7 +208,8 @@ const NewShift = (props) => {
               label="Shift Time"
               slots={slots}
               className="flex-1"
-              value={time}
+              value={dayjs(`${row.date}T${row.time}`)}
+              name="time"
               slotProps={{
                 actionBar: {
                   actions: ["cancel", "accept"],
@@ -134,9 +245,10 @@ const NewShift = (props) => {
         <div className="flex gap-2 mb-2">
           <MyTextField
             label="Type"
-            value={type}
+            value={row.type}
+            name="type"
             select
-            onChange={(e) => setType(e.target.value)}
+            onChange={(e) => setFormData({ ...row, type: e.target.value })}
             sx={sx}
             className="flex-1"
             required
@@ -148,6 +260,9 @@ const NewShift = (props) => {
             className="flex-1"
             type="number"
             label="Duration"
+            name="duration"
+            value={row.duration}
+            onChange={(e) => setFormData({ ...row, duration: e.target.value })}
             required
             sx={sx}
           />
@@ -155,41 +270,46 @@ const NewShift = (props) => {
             className="flex-1"
             type="number"
             label="Amount"
+            name="amount"
+            value={row.amount}
+            onChange={(e) => setFormData({ ...row, amount: e.target.value })}
             required
             sx={sx}
           />
         </div>
         <div className="flex gap-2 mb-2">
           <MyTextField
-            value={staff}
+            value={row.staffId}
             label="Staff"
             className="flex-1"
             sx={sx}
             select
+            name="staff"
             onChange={(e) => {
-              setStaff(e.target.value);
-              e.target.value ? setStatus("filled") : setStatus("");
+              setFormData({ ...row, staff: e.target.value });
+              setFormData({
+                ...row,
+                status: e.target.value ? "filled" : "",
+              });
             }}
           >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
             {staffs.map((staff) => (
-              <MenuItem
-                key={staff.id}
-                value={`${staff.firstName} ${staff.lastName}`}
-              >
+              <MenuItem key={staff.id} value={`${staff.username}`}>
                 {`${staff.firstName} ${staff.lastName}`}
               </MenuItem>
             ))}
           </MyTextField>
           <MyTextField
-            value={status}
+            value={row.status}
             label="Status"
+            name="status"
             sx={sx}
             select
             className="flex-1"
-            onChange={(e) => setStatus(e.target.value)}
+            onChange={(e) => setFormData({ ...row, status: e.target.value })}
             required
           >
             <MenuItem value="open">Open</MenuItem>
@@ -199,17 +319,145 @@ const NewShift = (props) => {
             <MenuItem value="finished">Finished</MenuItem>
           </MyTextField>
         </div>
-        <div className="flex gap-2 mb-2">
+        <div className="flex flex-col gap-2">
+          {row?.clockin?.length > 0 && (
+            <Accordion expanded={isMapVisible === "clockin"} onChange={handleAccordionChange('clockin')}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+              >
+                Clock In:
+              </AccordionSummary>
+              <AccordionDetails>
+                {row?.clockin?.map((item, i) => {
+                  return (
+                    <div key={i}>
+                      <div className="flex justify-center">
+                        {isMapVisible && isLoaded ? (
+                          <GoogleMap
+                            mapContainerStyle={containerStyle}
+                            center={item.coordinates}
+                            zoom={12}
+                            // onUnmount={handleMapUnmount}
+                            options={{ mapId: import.meta.env.VITE_MAP_ID }}
+                          >
+                            <CustomMarker position={item.coordinates} />
+                          </GoogleMap>
+                        ) : (
+                          <p>Map will display here when expanded.</p>
+                        )}
+                      </div>
+                      <p>
+                        Time:{" "}
+                        {dayjs(`${row.date}T${row.time}`).format("hh:mm A")}
+                      </p>
+                    </div>
+                  );
+                })}
+              </AccordionDetails>
+            </Accordion>
+          )}
+          {row?.clockout?.length > 0 && (
+            <Accordion expanded={isMapVisible === "clockout"} onChange={handleAccordionChange('clockout')}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+              >
+                Clock Out
+              </AccordionSummary>
+              <AccordionDetails>
+                {row?.clockout?.map((item, i) => {
+                  return (
+                    <div key={i}>
+                      <div className="flex justify-center">
+                        {isMapVisible && isLoaded ? (
+                          <GoogleMap
+                            mapContainerStyle={containerStyle}
+                            center={item.coordinates}
+                            zoom={12}
+                            // onUnmount={handleMapUnmount}
+                            options={{ mapId: import.meta.env.VITE_MAP_ID }}
+                          >
+                            <CustomMarker position={item.coordinates} />
+                          </GoogleMap>
+                        ) : (
+                          <p>Map will display here when expanded.</p>
+                        )}
+                      </div>
+                      <p>
+                        Time:{" "}
+                        {dayjs(`${row.date}T${row.time}`).format("hh:mm A")}
+                      </p>
+                    </div>
+                  );
+                })}
+              </AccordionDetails>
+            </Accordion>
+          )}
+        </div>
+        <div className="flex flex-col gap-2 my-2">
+          {row?.notes?.length > 0 && (
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+              >
+                Previous Notes
+              </AccordionSummary>
+              <AccordionDetails>
+                <Table className="w-fit">
+                  <TableBody>
+                    {row.notes?.map((note, i) => {
+                      return (
+                        <TableRow
+                          key={i}
+                          className="flex"
+                          sx={{
+                            "&:last-child td, &:last-child th": {
+                              border: 0,
+                            },
+                          }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {note.staffId}:
+                          </TableCell>
+                          <TableCell align="left" className="w-[250px]">
+                            {note.note}
+                          </TableCell>
+                          <TableCell align="left">
+                            {dayjs(note.datetime).format("YYYY-MM-DD h:mma")}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </AccordionDetails>
+            </Accordion>
+          )}
           <MyTextField label="Notes" multiline fullWidth rows={5} sx={sx} />
         </div>
         <div className="text-right">
-          <Button
-            type="submit"
-            variant="contained"
-            className="flex items-center gap-1 h-fit"
-          >
-            <p>Create</p>
-          </Button>
+          {edit ? (
+            <Button
+              type="submit"
+              variant="contained"
+              className="flex items-center gap-1 h-fit"
+            >
+              <p>Update</p>
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              variant="contained"
+              className="flex items-center gap-1 h-fit"
+            >
+              <p>Create</p>
+            </Button>
+          )}
         </div>
       </form>
     </Dialog>
@@ -219,15 +467,80 @@ const NewShift = (props) => {
 const Shifts = () => {
   const [expandedRow, setExpandedRow] = useState(null);
   const [selectedRows, setSelectedRows] = useState(0);
-  const [selectedRow, setSelectedRow] = useState({});
+  const [edit, setEdit] = useState(false);
+  const [editRow, setEditRow] = useState({});
+  const [selectedRow, setSelectedRow] = useState({
+    date: null,
+    time: null,
+    type: "",
+    duration: "",
+    client: { name: "" },
+    notes: [{}],
+    amount: "",
+    staffId: "",
+    status: "",
+    clockin: [],
+    clockout: [],
+    id: null,
+    paid: "",
+  });
+
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (type) => {
+    if (type === "edit") {
+      setEdit(true);
+      setEditRow(selectedRow);
+    } else {
+      setEdit(false);
+      setEditRow({
+        date: null,
+        time: null,
+        type: "",
+        duration: "",
+        client: { name: "" },
+        notes: [],
+        amount: "",
+        staffId: "",
+        status: "",
+        clockin: [],
+        clockout: [],
+        id: null,
+        paid: "",
+      });
+    }
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const customFooter = () => {
+    return (
+      <div className="flex gap-2 justify-center md:justify-between items-center px-2 flex-col lg:flex-row border-t-2">
+        {selectedRows > 0 && (
+          <div className="flex gap-2 flex-1 items-center mt-5 lg:mt-0">
+            <p>{selectedRows} Selected</p>
+            {selectedRows > 1 ||
+              ["finished", "closed"].includes(selectedRow.status) || (
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="small"
+                  onClick={() => handleClickOpen("edit")}
+                >
+                  Edit
+                </Button>
+              )}
+            <Button color="error" variant="contained" size="small">
+              Del
+            </Button>
+          </div>
+        )}
+        <GridFooter className="flex-1" />
+      </div>
+    );
   };
 
   const cols = [
@@ -286,27 +599,27 @@ const Shifts = () => {
         return row.client.name;
       },
     },
-    // {
-    //   field: "staffId",
-    //   headerName: "Staff ID",
-    //   align: "center",
-    //   headerAlign: "center",
-    //   width: 200,
-    // },
-    // {
-    //   field: "amount",
-    //   headerName: "Amount",
-    //   align: "center",
-    //   headerAlign: "center",
-    //   width: 200,
-    // },
-    // {
-    //   field: "paid",
-    //   headerName: "Paid",
-    //   align: "center",
-    //   headerAlign: "center",
-    //   width: 200,
-    // },
+    {
+      field: "staffId",
+      headerName: "Staff ID",
+      align: "center",
+      headerAlign: "center",
+      width: 200,
+    },
+    {
+      field: "amount",
+      headerName: "Amount",
+      align: "center",
+      headerAlign: "center",
+      width: 200,
+    },
+    {
+      field: "paid",
+      headerName: "Paid",
+      align: "center",
+      headerAlign: "center",
+      width: 200,
+    },
     {
       field: "status",
       headerName: "Status",
@@ -346,13 +659,12 @@ const Shifts = () => {
     // },
   ];
   const handleRowClick = (params) => {
-    console.log(params);
     const rowId = params.id;
     setExpandedRow((prev) => (prev === rowId ? null : rowId));
   };
 
   Shifts.propTypes = {
-    row: PropTypes.object.isRequired,
+    row: PropTypes.object
   };
 
   return (
@@ -361,10 +673,21 @@ const Shifts = () => {
         <DataGrid
           rows={shifts}
           columns={cols}
+          columnVisibilityModel={{
+            staffId: false,
+            amount: false,
+            paid: false,
+          }}
           initialState={{
             pagination: {
               paginationModel: {
                 pageSize: 5,
+              },
+            },
+            filter: {
+              filterModel: {
+                items: [],
+                quickFilterExcludeHiddenColumns: false,
               },
             },
           }}
@@ -378,14 +701,14 @@ const Shifts = () => {
           slots={{
             toolbar: (props) => (
               <div className="flex justify-between items-center">
-                <p className="text-xl pl-1">Shifts</p>
+                <p className="text-xl pl-1">Shift</p>
                 <GridToolbar {...props} />
               </div>
             ),
             row: (props) => (
               <>
                 <GridRow {...props} />
-                {expandedRow === props.row.id && (
+                {expandedRow === props.row?.id && (
                   <div
                     // sx={{
                     //   backgroundColor: "#c9c8c8",
@@ -402,31 +725,31 @@ const Shifts = () => {
                         Assigned Staff
                       </Divider>
                       <p className="w-full md:w-1/2 pl-2">
-                        {props.row.staffId}
+                        {props.row?.staffId}
                       </p>
                       <Divider textAlign="left" className="md:w-full">
                         Shift Amount
                       </Divider>
                       <p className="w-full md:w-1/2 pl-2">
-                        ${props.row.amount}.00
+                        ${props.row?.amount}.00
                       </p>
                       <Divider textAlign="left" className="md:w-full">
                         Amount Paid
                       </Divider>
                       <p className="w-full md:w-1/2 pl-2">
-                        ${props.row.paid}.00
+                        ${props.row?.paid}.00
                       </p>
                       <Divider textAlign="left" className="md:w-full">
                         Clock In
                       </Divider>
                       <p className="w-full md:w-1/2 pl-2">
-                        {props.row.clockin[0]?.time || "N/A"}
+                        {props.row?.clockin[0]?.time || "N/A"}
                       </p>
                       <Divider textAlign="left" className="md:w-full">
                         Clock Out
                       </Divider>
                       <p className="w-full md:w-1/2 pl-2">
-                        {props.row.clockout[0]?.time || "N/A"}
+                        {props.row?.clockout[0]?.time || "N/A"}
                       </p>
                       <Divider textAlign="left" className="md:w-full">
                         Notes
@@ -434,7 +757,7 @@ const Shifts = () => {
                       <div className="h-24 overflow-auto w-fit px-2 min-w-96">
                         <Table className="w-fit">
                           <TableBody>
-                            {props.row.notes?.map((note, i) => {
+                            {props.row?.notes?.map((note, i) => {
                               return (
                                 <TableRow
                                   key={i}
@@ -467,29 +790,7 @@ const Shifts = () => {
                 )}
               </>
             ),
-            footer: (props) => (
-              <div className="flex gap-2 justify-center md:justify-between items-center px-2 flex-col lg:flex-row border-t-2">
-                {selectedRows > 0 && (
-                  <div className="flex gap-2 flex-1 items-center mt-5 lg:mt-0">
-                    <p>{selectedRows} Selected</p>
-                    {selectedRows > 1 ||
-                      ["finished", "closed"].includes(selectedRow.status) || (
-                        <Button
-                          color="primary"
-                          variant="contained"
-                          size="small"
-                        >
-                          Edit
-                        </Button>
-                      )}
-                    <Button color="error" variant="contained" size="small">
-                      Del
-                    </Button>
-                  </div>
-                )}
-                <GridFooter {...props} className="flex-1" />
-              </div>
-            ),
+            footer: customFooter,
           }}
           slotProps={{
             toolbar: {
@@ -544,11 +845,11 @@ const Shifts = () => {
         />
       </div>
       <div className="h-fit p-2 text-right bg-slate-500 rounded-sm">
-        <Button variant="contained" onClick={handleClickOpen}>
+        <Button variant="contained" onClick={() => handleClickOpen("create")}>
           New Shift
         </Button>
       </div>
-      <NewShift open={open} onClose={handleClose} />
+      <NewShift open={open} onClose={handleClose} row={editRow} edit={edit} />
     </div>
   );
 };

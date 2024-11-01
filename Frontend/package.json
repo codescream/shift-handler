@@ -17,6 +17,7 @@
     "@mui/x-charts": "^7.18.0",
     "@mui/x-data-grid": "^7.18.0",
     "@mui/x-date-pickers": "^7.18.0",
+    "@react-google-maps/api": "^2.20.3",
     "autoprefixer": "^10.4.20",
     "dayjs": "^1.11.13",
     "postcss": "^8.4.45",

@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 
 
 export const clients = [
@@ -228,15 +229,15 @@ export const shifts = [
   {
     id: 1,
     location: "123 Main St",
-    date: "2024-10-09",
-    time: "08:00 AM",
+    date: dayjs("2024-10-09").format("YYYY-MM-DD"),
+    time: "08:00",
     type: "AM",
     duration: 8,
     client: getClient(1001),   
     staffId: getStaff(5001).username,
     amount: 150.0,
     paid: 150.0,
-    status: "closed",
+    status: "open",
     notes: [
       {
         staffId: getStaff(5001).username,
@@ -251,24 +252,24 @@ export const shifts = [
     ],
     clockin: [
       {
-        time: "08:00 AM",
+        time: "08:00",
         accuracy: "high",
-        coordinates: { latitude: 40.7128, longitude: -74.0060 }
+        coordinates: { lat: 43.6532000, lng: -79.383200 }
       }
     ],
     clockout: [
       {
-        time: "04:00 PM",
+        time: "16:00",
         accuracy: "high",
-        coordinates: { latitude: 40.7128, longitude: -74.0060 }
+        coordinates: { lat: 43.6532000, lng: -79.3832000 }
       }
     ]
   },
   {
     id: 2,
     location: "456 Elm St",
-    date: "2024-10-10",
-    time: "01:00 PM",
+    date: dayjs("2024-10-10").format("YYYY-MM-DD"),
+    time: "13:00",
     type: "PM",
     duration: 6,
     client: getClient(1002),
@@ -283,8 +284,8 @@ export const shifts = [
   {
     id: 3,
     location: "789 Oak St",
-    date: "2024-10-11",
-    time: "07:00 AM",
+    date: dayjs("2024-10-11").format("YYYY-MM-DD"),
+    time: "07:00",
     type: "AM",
     duration: 8,
     client: getClient(1003),
@@ -301,24 +302,24 @@ export const shifts = [
     ],
     clockin: [
       {
-        time: "07:00 AM",
+        time: "07:00",
         accuracy: "high",
-        coordinates: { latitude: 40.7306, longitude: -73.9352 }
+        coordinates: { lat: 45.4215000, lng: -75.6972000 }
       }
     ],
     clockout: [
       {
-        time: "03:00 PM",
+        time: "15:00",
         accuracy: "high",
-        coordinates: { latitude: 40.7306, longitude: -73.9352 }
+        coordinates: { lat: 45.4215000, lng: -75.6972000 }
       }
     ]
   },
   {
     id: 4,
     location: "246 Pine St",
-    date: "2024-10-12",
-    time: "02:00 PM",
+    date: dayjs("2024-10-12").format("YYYY-MM-DD"),
+    time: "16:00",
     type: "PM",
     duration: 4,
     client: getClient(1004),
@@ -335,9 +336,9 @@ export const shifts = [
     ],
     clockin: [
       {
-        time: "02:00 PM",
+        time: "14:00",
         accuracy: "high",
-        coordinates: { latitude: 40.7127, longitude: -74.0059 }
+        coordinates: { lat: 48.3809000, lng: -89.2477000 }
       }
     ],
     clockout: []
@@ -345,8 +346,8 @@ export const shifts = [
   {
     id: 5,
     location: "357 Cedar St",
-    date: "2024-10-13",
-    time: "09:00 AM",
+    date: dayjs("2024-10-13").format("YYYY-MM-DD"),
+    time: "09:00",
     type: "AM",
     duration: 6,
     client: getClient(1005),
@@ -363,24 +364,24 @@ export const shifts = [
     ],
     clockin: [
       {
-        time: "09:00 AM",
+        time: "09:00",
         accuracy: "medium",
-        coordinates: { latitude: 40.7580, longitude: -73.9855 }
+        coordinates: { lat: 44.2312000, lng: -76.4860000 }
       }
     ],
     clockout: [
       {
-        time: "03:00 PM",
+        time: "15:00",
         accuracy: "medium",
-        coordinates: { latitude: 40.7580, longitude: -73.9855 }
+        coordinates: { lat: 44.2312000, lng: -76.4860000 }
       }
     ]
   },
   {
     id: 6,
     location: "159 Birch St",
-    date: "2024-10-14",
-    time: "06:00 AM",
+    date: dayjs("2024-10-14").format("YYYY-MM-DD"),
+    time: "06:00",
     type: "AM",
     duration: 10,
     client: getClient(1006),
@@ -395,8 +396,8 @@ export const shifts = [
   {
     id: 7,
     location: "753 Willow St",
-    date: "2024-10-15",
-    time: "03:00 PM",
+    date: dayjs("2024-10-15").format("YYYY-MM-DD"),
+    time: "15:00",
     type: "PM",
     duration: 5,
     client: getClient(1007),
@@ -413,24 +414,24 @@ export const shifts = [
     ],
     clockin: [
       {
-        time: "03:00 PM",
+        time: "15:00",
         accuracy: "high",
-        coordinates: { latitude: 40.7411, longitude: -73.9897 }
+        coordinates: { lat: 46.4917000, lng: -81.0105000 }
       }
     ],
     clockout: [
       {
-        time: "08:00 PM",
+        time: "20:00",
         accuracy: "high",
-        coordinates: { latitude: 40.7411, longitude: -73.9897 }
+        coordinates: { lat: 46.4917000, lng: -81.0105000 }
       }
     ]
   },
   {
     id: 8,
     location: "951 Maple St",
-    date: "2024-10-16",
-    time: "12:00 PM",
+    date: dayjs("2024-10-16").format("YYYY-MM-DD"),
+    time: "12:00",
     type: "PM",
     duration: 7,
     client: getClient(1008),
@@ -447,9 +448,9 @@ export const shifts = [
     ],
     clockin: [
       {
-        time: "12:00 PM",
+        time: "12:00",
         accuracy: "medium",
-        coordinates: { latitude: 40.7295, longitude: -73.9965 }
+        coordinates: { lat: 49.7675000, lng: -94.4897000 }
       }
     ],
     clockout: []
@@ -457,8 +458,8 @@ export const shifts = [
   {
     id: 9,
     location: "111 Spruce St",
-    date: "2024-10-17",
-    time: "05:00 AM",
+    date: dayjs("2024-10-17").format("YYYY-MM-DD"),
+    time: "05:00",
     type: "AM",
     duration: 8,
     client: getClient(1009),
@@ -473,8 +474,8 @@ export const shifts = [
   {
     id: 10,
     location: "222 Ash St",
-    date: "2024-10-18",
-    time: "10:00 AM",
+    date: dayjs("2024-10-18").format("YYYY-MM-DD"),
+    time: "10:00",
     type: "AM",
     duration: 8,
     client: getClient(1010),
@@ -491,16 +492,16 @@ export const shifts = [
     ],
     clockin: [
       {
-        time: "10:00 AM",
+        time: "10:00",
         accuracy: "high",
-        coordinates: { latitude: 40.7488, longitude: -73.9846 }
+        coordinates: { lat: 42.3149000, lng: -83.0364000 }
       }
     ],
     clockout: [
       {
-        time: "06:00 PM",
+        time: "18:00",
         accuracy: "high",
-        coordinates: { latitude: 40.7488, longitude: -73.9846 }
+        coordinates: { lat: 42.3149000, lng: -83.0364000 }
       }
     ]
   }
