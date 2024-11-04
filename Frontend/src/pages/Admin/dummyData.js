@@ -230,7 +230,7 @@ export const shifts = [
     id: 1,
     location: "123 Main St",
     date: dayjs("2024-10-09").format("YYYY-MM-DD"),
-    time: "08:00",
+    time: "08:00:00",
     type: "AM",
     duration: 8,
     client: getClient(1001),   

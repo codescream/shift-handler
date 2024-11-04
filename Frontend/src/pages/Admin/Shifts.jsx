@@ -30,6 +30,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MyTextField } from "../../components";
+import { useGetAllShiftsQuery } from "../../../services/api";
 
 const containerStyle = {
   width: "100%",
@@ -596,7 +597,7 @@ const Shifts = () => {
       //   return params.row.client.email;
       // },
       valueGetter: (value, row) => {
-        return row.client.name;
+        return `${row.client.firstName} ${row.client.lastName}`;
       },
     },
     {
@@ -658,6 +659,17 @@ const Shifts = () => {
     //   }
     // },
   ];
+
+
+  const { data, error, isLoading } = useGetAllShiftsQuery();
+
+  console.log(data);
+  console.log(error);
+  console.log(isLoading);
+
+
+
+
   const handleRowClick = (params) => {
     const rowId = params.id;
     setExpandedRow((prev) => (prev === rowId ? null : rowId));
@@ -671,7 +683,7 @@ const Shifts = () => {
     <div className="adminLayout">
       <div className="flex flex-col flex-1 gap-4 w-full">
         <DataGrid
-          rows={shifts}
+          rows={data}
           columns={cols}
           columnVisibilityModel={{
             staffId: false,
@@ -725,7 +737,7 @@ const Shifts = () => {
                         Assigned Staff
                       </Divider>
                       <p className="w-full md:w-1/2 pl-2">
-                        {props.row?.staffId}
+                        {props.row?.staff?.id}
                       </p>
                       <Divider textAlign="left" className="md:w-full">
                         Shift Amount
@@ -743,13 +755,13 @@ const Shifts = () => {
                         Clock In
                       </Divider>
                       <p className="w-full md:w-1/2 pl-2">
-                        {props.row?.clockin[0]?.time || "N/A"}
+                        {props.row?.clockin?.time || "N/A"}
                       </p>
                       <Divider textAlign="left" className="md:w-full">
                         Clock Out
                       </Divider>
                       <p className="w-full md:w-1/2 pl-2">
-                        {props.row?.clockout[0]?.time || "N/A"}
+                        {props.row?.clockout?.time || "N/A"}
                       </p>
                       <Divider textAlign="left" className="md:w-full">
                         Notes
@@ -757,7 +769,7 @@ const Shifts = () => {
                       <div className="h-24 overflow-auto w-fit px-2 min-w-96">
                         <Table className="w-fit">
                           <TableBody>
-                            {props.row?.notes?.map((note, i) => {
+                            {Object.values(props.row?.notes)?.map((note, i) => {
                               return (
                                 <TableRow
                                   key={i}
@@ -769,10 +781,10 @@ const Shifts = () => {
                                   }}
                                 >
                                   <TableCell component="th" scope="row">
-                                    {note.staffId}:
+                                    {note.name}:
                                   </TableCell>
                                   <TableCell align="left" className="w-[250px]">
-                                    {note.note}
+                                    {note.notes}
                                   </TableCell>
                                   <TableCell align="left">
                                     {dayjs(note.datetime).format(

@@ -1,5 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { store } from "../services/store.js";
+import { Provider } from "react-redux";
 import { createTheme, ThemeProvider } from "@mui/material";
 import App from "./App.jsx";
 import "./index.css";
@@ -60,7 +62,9 @@ const theme = createTheme({
 createRoot(document.getElementById("root")).render(
   <ThemeProvider theme={theme}>
     <StrictMode>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </StrictMode>
   </ThemeProvider>
 );

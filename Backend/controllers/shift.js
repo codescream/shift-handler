@@ -54,7 +54,12 @@ export const create = (req, res) => {
 };
 
 export const fetchAll = (req, res) => {
-  Shift.findAll()
+  Shift.findAll({
+    include: [{model: User, as: 'staff'}, {model: Client, as: 'client'}],
+    attributes: {
+      exclude: ['staffId', 'clientId']
+    }
+  })
     .then((shifts) => {
       res.status(200).json(shifts);
     })
@@ -78,8 +83,12 @@ export const fetchOne = (req, res) => {
     });
 };
 
-export const clientShifts = (req, res) => {
+export const clientShifts = async (req, res) => {
   const id = req.params.id;
+  console.log(id);
+  const client = await Client.findByPk(id);
+
+  console.log(await client.getShifts());
 
   Shift.findAll({
     where: {
