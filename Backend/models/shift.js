@@ -55,7 +55,7 @@ const Shift = sequelize.define('Shift', {
         this.setDataValue('status', 'filled');
         this.setDataValue('staffId', val);
       }
-    }
+    },
   },
   amount: {
     type: DataTypes.FLOAT,
@@ -126,5 +126,14 @@ const Shift = sequelize.define('Shift', {
   sequelize,
   modelName: "Shift"
 });
+
+Shift.belongsTo(User, { foreignKey: 'staffId', as: 'staff' });
+
+Shift.belongsTo(Client, { foreignKey: 'clientId', as: 'client' });
+
+Client.hasMany(Shift, { foreignKey: "clientId" });
+
+User.hasMany(Shift, { foreignKey: "staffId" });
+
 
 export default Shift;

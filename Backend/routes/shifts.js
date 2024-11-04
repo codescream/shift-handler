@@ -6,13 +6,13 @@ const router = express.Router();
 
 router.post('/', verifyRole, create);
 
-router.get('/', verifyToken, fetchAll);
+router.get('/', fetchAll);
 
-router.get('/:id', verifyToken, fetchOne);
+router.get('/:id', fetchOne);
 
-router.get('/client/:id', verifyToken, clientShifts);
+router.get('/client/:id', clientShifts);
 
-router.patch('/:id', verifyRole, update);
+router.patch('/:id', update);
 
 router.delete('/:id', verifyRole, deleteOne);
 
