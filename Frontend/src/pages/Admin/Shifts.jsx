@@ -1,6 +1,6 @@
 import { DataGrid, GridFooter, GridRow, GridToolbar } from "@mui/x-data-grid";
 import { PropTypes } from "prop-types";
-import { shifts, staffs } from "./index";
+import { staffs } from "./index";
 import { useState, useEffect } from "react";
 import {
   Accordion,
@@ -31,6 +31,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MyTextField } from "../../components";
 import { useGetAllShiftsQuery } from "../../../services/api";
+import { useLocation } from "react-router-dom";
 
 const containerStyle = {
   width: "100%",
@@ -322,7 +323,10 @@ const NewShift = (props) => {
         </div>
         <div className="flex flex-col gap-2">
           {row?.clockin?.length > 0 && (
-            <Accordion expanded={isMapVisible === "clockin"} onChange={handleAccordionChange('clockin')}>
+            <Accordion
+              expanded={isMapVisible === "clockin"}
+              onChange={handleAccordionChange("clockin")}
+            >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
@@ -360,7 +364,10 @@ const NewShift = (props) => {
             </Accordion>
           )}
           {row?.clockout?.length > 0 && (
-            <Accordion expanded={isMapVisible === "clockout"} onChange={handleAccordionChange('clockout')}>
+            <Accordion
+              expanded={isMapVisible === "clockout"}
+              onChange={handleAccordionChange("clockout")}
+            >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1-content"
@@ -466,10 +473,54 @@ const NewShift = (props) => {
 };
 
 const Shifts = () => {
+  const location = useLocation();
   const [expandedRow, setExpandedRow] = useState(null);
   const [selectedRows, setSelectedRows] = useState(0);
   const [edit, setEdit] = useState(false);
   const [editRow, setEditRow] = useState({});
+  const [filterModel, setFilterModel] = useState({
+    items: [
+      {
+        field: "id",
+        operator: "equals",
+        value: "",
+      },
+    ],
+  });
+
+  useEffect(() => {
+    if (location?.state && location?.state?.searchTerm) {
+      setFilterModel({
+        ...filterModel,
+        items: [
+          {
+            field: "id",
+            operator: "equals",
+            value: location?.state?.searchTerm
+              ? `${location?.state?.searchTerm}`
+              : "",
+          },
+        ],
+        quickFilterExcludeHiddenColumns: false,
+        quickFilterValues: location?.state?.searchTerm
+          ? [`${location?.state?.searchTerm}`]
+          : [""],
+      });
+    }
+  }, [location.state]);
+
+  const handleFilterModelChange = () => {
+    setFilterModel({
+      items: [
+        {
+          field: "id",
+          operator: "equals",
+          value: "",
+        },
+      ],
+    });
+  };
+
   const [selectedRow, setSelectedRow] = useState({
     date: null,
     time: null,
@@ -660,15 +711,11 @@ const Shifts = () => {
     // },
   ];
 
-
   const { data, error, isLoading } = useGetAllShiftsQuery();
 
   console.log(data);
   console.log(error);
   console.log(isLoading);
-
-
-
 
   const handleRowClick = (params) => {
     const rowId = params.id;
@@ -676,7 +723,7 @@ const Shifts = () => {
   };
 
   Shifts.propTypes = {
-    row: PropTypes.object
+    row: PropTypes.object,
   };
 
   return (
@@ -696,13 +743,14 @@ const Shifts = () => {
                 pageSize: 5,
               },
             },
-            filter: {
-              filterModel: {
-                items: [],
-                quickFilterExcludeHiddenColumns: false,
-              },
-            },
+            // filter: {
+            //   filterModel:
+            //     filterModel
+            //   ,
+            // },
           }}
+          filterModel={filterModel}
+          onFilterModelChange={handleFilterModelChange}
           onRowSelectionModelChange={(rows, details) => {
             if (rows.length === 1) {
               setSelectedRow(details.api.getRowParams(rows[0]).row);
@@ -713,7 +761,7 @@ const Shifts = () => {
           slots={{
             toolbar: (props) => (
               <div className="flex justify-between items-center">
-                <p className="text-xl pl-1">Shift</p>
+                <p className="text-xl pl-1">Shifts</p>
                 <GridToolbar {...props} />
               </div>
             ),

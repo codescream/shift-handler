@@ -131,9 +131,9 @@ Shift.belongsTo(User, { foreignKey: 'staffId', as: 'staff' });
 
 Shift.belongsTo(Client, { foreignKey: 'clientId', as: 'client' });
 
-Client.hasMany(Shift, { foreignKey: "clientId" });
+Client.hasMany(Shift, { foreignKey: "clientId", as: "shifts" });
 
-User.hasMany(Shift, { foreignKey: "staffId" });
+User.hasMany(Shift, { foreignKey: "staffId", as: "shifts" });
 
 
 export default Shift;

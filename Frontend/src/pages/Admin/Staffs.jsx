@@ -1,18 +1,45 @@
-import { DataGrid, GridFooter, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid, GridFooter, GridRow, GridToolbar } from "@mui/x-data-grid";
 import Switch from "@mui/material/Switch";
+import { PropTypes } from "prop-types";
 import { staffs } from ".";
 import { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Divider } from "@mui/material";
+import { useGetAllStaffsQuery } from "../../../services/api";
+import { Link } from "react-router-dom";
 
 const Staffs = () => {
   const [selectedRows, setSelectedRows] = useState(0);
   const [allStaffs, setAllStaffs] = useState(staffs);
   const [selectedRow, setSelectedRow] = useState({});
+  const [expandedRow, setExpandedRow] = useState(null);
+
+  const { data, error, isLoading } = useGetAllStaffsQuery();
+
+  console.log(data);
+  console.log(error);
+  console.log(isLoading);
 
   const switchStatus = (e, row) => {
-    const updatedStaffs = allStaffs.map(staff => staff.id === row.id ? { ...staff, isActive: e.target.checked } : staff);
+    // e.stopPropagation();
+    const updatedStaffs = allStaffs.map((staff) =>
+      staff.id === row.id ? { ...staff, isActive: e.target.checked } : staff
+    );
     setAllStaffs(updatedStaffs);
-    setSelectedRow(updatedStaffs.find(staff => staff.id === row.id));
+    setSelectedRow(updatedStaffs.find((staff) => staff.id === row.id));
+  };
+
+  const handleWrapperClick = (e) => {
+    e.stopPropagation();
+  };
+
+  const handleRowClick = (params) => {
+    const rowId = params.id;
+    setExpandedRow((prev) => (prev === rowId ? null : rowId));
+  };
+
+  const showShift = (params) => {
+    console.log("routing to shift");
+    console.log(params)
   };
 
   const cols = [
@@ -73,23 +100,61 @@ const Staffs = () => {
       flex: 1,
       minWidth: 200,
       renderCell: (params) => (
-        <Switch
-          inputProps={{
-            "aria-label": "status",
-          }}
-          checked={params.row.isActive}
-          color="success"
-          onChange={(e) => switchStatus(e, params.row)}
-        />
+        <div onClick={handleWrapperClick}>
+          <Switch
+            inputProps={{
+              "aria-label": "status",
+            }}
+            checked={params.row.isActive}
+            color="success"
+            onChange={(e) => switchStatus(e, params.row)}
+          />
+        </div>
       ),
     },
   ];
+
+  const shiftCols = [
+    {
+      field: "id",
+      headerName: "ID",
+      width: 70,
+      renderCell: (params) => {
+        return (
+          <Link to={"../shifts"} state={{ searchTerm: params.row.id }}>
+            {params.row.id}
+          </Link>
+        );
+      },
+    },
+    {
+      field: "clientId",
+      headerName: "Client",
+      width: 130,
+      renderCell: (params) => {
+        return (
+          <Link to={"../clients"} state={{ searchTerm: params.row.clientId }}>
+            {params.row.clientId}
+          </Link>
+        );
+      },
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 160,
+    },
+  ];
+
+  Staffs.propTypes = {
+    row: PropTypes.object,
+  };
 
   return (
     <div className="adminLayout">
       <div className="flex flex-col flex-1 gap-4 w-full">
         <DataGrid
-          rows={allStaffs}
+          rows={data}
           columns={cols}
           initialState={{
             pagination: {
@@ -117,6 +182,11 @@ const Staffs = () => {
             "& .MuiDataGrid-footerContainer": {
               border: "none",
             },
+            "& .MuiDataGrid-row": {
+              bgcolor: "#e2fff5",
+              borderRadius: "5px",
+              cursor: "pointer",
+            },
           }}
           slotProps={{
             toolbar: {
@@ -129,6 +199,41 @@ const Staffs = () => {
                 <p className="text-xl pl-1">Staffs</p>
                 <GridToolbar {...props} />
               </div>
+            ),
+            row: (props) => (
+              <>
+                <GridRow {...props} />
+                {expandedRow === props.row?.id && (
+                  <div
+                    // sx={{
+                    //   backgroundColor: "#c9c8c8",
+                    //   padding: 2,
+                    //   height: "fit-content",
+                    //   width: "fit-content",
+                    //   minWidth: "400px",
+                    //   maxWidth: "400px",
+                    // }}
+                    className="p-4 h-fit w-full bg-[#c9c8c8]"
+                  >
+                    <div className="w-fit sticky left-4">
+                      <Divider textAlign="left">Shifts</Divider>
+                      <DataGrid
+                        rows={props.row?.shifts}
+                        columns={shiftCols}
+                        initialState={{
+                          pagination: {
+                            paginationModel: { page: 0, pageSize: 5 },
+                          },
+                        }}
+                        pageSizeOptions={[5, 10]}
+                        sx={{ border: 0 }}
+                        onRowClick={showShift}
+                        disableRowSelectionOnClick
+                      />
+                    </div>
+                  </div>
+                )}
+              </>
             ),
             footer: (props) => (
               <div className="flex gap-2 justify-center md:justify-between items-center px-2 flex-col lg:flex-row border-t-2">
@@ -156,6 +261,7 @@ const Staffs = () => {
           disableColumnFilter
           disableColumnSelector
           disableDensitySelector
+          onRowClick={handleRowClick}
         />
       </div>
     </div>
