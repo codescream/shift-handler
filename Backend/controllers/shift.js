@@ -55,10 +55,13 @@ export const create = (req, res) => {
 
 export const fetchAll = (req, res) => {
   Shift.findAll({
-    include: [{model: User, as: 'staff'}, {model: Client, as: 'client'}],
+    include: [
+      { model: User, as: "staff" },
+      { model: Client, as: "client" },
+    ],
     attributes: {
-      exclude: ['staffId', 'clientId']
-    }
+      exclude: ["staffId", "clientId"],
+    },
   })
     .then((shifts) => {
       res.status(200).json(shifts);
@@ -132,12 +135,10 @@ export const update = (req, res) => {
                   client: `${client.firstName} ${client.lastName}`,
                   notes: shift.notes["1"]?.notes || "",
                 });
-                res
-                  .status(200)
-                  .json({
-                    message:
-                      "shift updated successfully - email sent to assigned staff",
-                  });
+                res.status(200).json({
+                  message:
+                    "shift updated successfully - email sent to assigned staff",
+                });
               })
               .catch((error) => {
                 console.log(error);

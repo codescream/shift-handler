@@ -4,6 +4,7 @@ import User from "../models/user.js";
 import updatePassword from "../emailService/updatePassword.js";
 import { Op } from "sequelize";
 import resetPassword from "../emailService/resetPass.js";
+import Shift from "../models/shift.js";
 
 export const createUser = (req, res) => {
   const body = req.body;
@@ -25,7 +26,10 @@ export const createUser = (req, res) => {
 };
 
 export const fetchAllUser = (req, res) => {
-  User.findAll({ attributes: { exclude: ["password"] } })
+  User.findAll({
+    include: [{ model: Shift, as: "shifts" }],
+    attributes: { exclude: ["password"] },
+  })
     .then((users) => {
       res.status(200).json(users);
     })
@@ -51,7 +55,7 @@ export const updatePass = async (req, res) => {
   // const user = await User.findByPk(body.id);
 
   const user = await User.findOne({
-    where: { username }
+    where: { username },
   });
 
   if (!user) return res.status(404).json({ message: "User not found" });
@@ -123,7 +127,7 @@ export const updateUser = async (req, res) => {
       //     res.status(200).json({ message: "Password update email sent" })
       //   )
       //   .catch((err) => res.status(500).json(err.message));
-      res.status(200).json({ message: "user updated successfully" })
+      res.status(200).json({ message: "user updated successfully" });
     })
     .catch((err) => {
       console.log(err.message);

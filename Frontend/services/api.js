@@ -33,8 +33,11 @@ export const shiftyApi = createApi({
         url: `/shifts/${shift.id}`,
       }),
     }),
+    getAllStaffs: builder.query({
+      query: () => "/user",
+    }),
   }),
 });
 
-export const { useGetAllShiftsQuery, useGetShiftQuery, useCreateShiftMutation, useUpdateShiftMutation } =
+export const { useGetAllShiftsQuery, useGetShiftQuery, useCreateShiftMutation, useUpdateShiftMutation, useGetAllStaffsQuery } =
   shiftyApi;
