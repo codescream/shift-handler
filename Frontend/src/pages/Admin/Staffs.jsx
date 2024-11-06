@@ -1,23 +1,26 @@
 import { DataGrid, GridFooter, GridRow, GridToolbar } from "@mui/x-data-grid";
 import Switch from "@mui/material/Switch";
 import { PropTypes } from "prop-types";
-import { staffs } from ".";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Divider } from "@mui/material";
 import { useGetAllStaffsQuery } from "../../../services/api";
 import { Link } from "react-router-dom";
 
 const Staffs = () => {
+  const { data, error, isLoading } = useGetAllStaffsQuery();
   const [selectedRows, setSelectedRows] = useState(0);
-  const [allStaffs, setAllStaffs] = useState(staffs);
+  const [allStaffs, setAllStaffs] = useState();
   const [selectedRow, setSelectedRow] = useState({});
   const [expandedRow, setExpandedRow] = useState(null);
-
-  const { data, error, isLoading } = useGetAllStaffsQuery();
 
   console.log(data);
   console.log(error);
   console.log(isLoading);
+
+  useEffect(() => {
+    setAllStaffs(data);
+  }, [data])
+  
 
   const switchStatus = (e, row) => {
     // e.stopPropagation();
@@ -154,7 +157,7 @@ const Staffs = () => {
     <div className="adminLayout">
       <div className="flex flex-col flex-1 gap-4 w-full">
         <DataGrid
-          rows={data}
+          rows={allStaffs}
           columns={cols}
           initialState={{
             pagination: {
