@@ -3,11 +3,17 @@ import { DataGrid, GridFooter, GridToolbar } from "@mui/x-data-grid";
 import Switch from "@mui/material/Switch";
 import { clients } from ".";
 import { useState } from "react";
+import { useGetAllClientsQuery } from "../../../services/api";
 
 const Clients = () => {
+  const { data, error , isLoading } = useGetAllClientsQuery();
   const [selectedRows, setSelectedRows] = useState(0);
-  const [allClients, setAllClients] = useState(clients);
+  const [allClients, setAllClients] = useState(data);
   const [selectedRow, setSelectedRow] = useState({});
+
+  console.log(data);
+  console.log(error);
+  console.log(isLoading);
 
   const switchStatus = (e, row) => {
     const updatedStaffs = allClients.map((staff) =>
@@ -31,7 +37,10 @@ const Clients = () => {
       align: "center",
       headerAlign: "center",
       flex: 1,
-      minWidth: 200
+      minWidth: 200,
+      valueGetter: (value, row) => {
+        return `${row.firstName} ${row.lastName}`
+      }
     },
     {
       field: "email",
