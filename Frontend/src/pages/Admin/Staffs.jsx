@@ -19,8 +19,7 @@ const Staffs = () => {
 
   useEffect(() => {
     setAllStaffs(data);
-  }, [data])
-  
+  }, [data]);
 
   const switchStatus = (e, row) => {
     // e.stopPropagation();
@@ -42,7 +41,7 @@ const Staffs = () => {
 
   const showShift = (params) => {
     console.log("routing to shift");
-    console.log(params)
+    console.log(params);
   };
 
   const cols = [
@@ -124,7 +123,11 @@ const Staffs = () => {
       width: 70,
       renderCell: (params) => {
         return (
-          <Link to={"../shifts"} state={{ searchTerm: params.row.id }}>
+          <Link
+            className="underline hover:text-red-500"
+            to={"../shifts"}
+            state={{ searchTerm: params.row.id }}
+          >
             {params.row.id}
           </Link>
         );
@@ -136,7 +139,11 @@ const Staffs = () => {
       width: 130,
       renderCell: (params) => {
         return (
-          <Link to={"../clients"} state={{ searchTerm: params.row.clientId }}>
+          <Link
+            className="underline hover:text-red-500"
+            to={"../clients"}
+            state={{ searchTerm: params.row.clientId }}
+          >
             {params.row.clientId}
           </Link>
         );
