@@ -1,11 +1,12 @@
 import { Button } from "@mui/material";
 import { DataGrid, GridFooter, GridToolbar } from "@mui/x-data-grid";
 import Switch from "@mui/material/Switch";
-import { clients } from ".";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGetAllClientsQuery } from "../../../services/api";
+import { useLocation } from "react-router-dom";
 
 const Clients = () => {
+  const location = useLocation();
   const { data, error , isLoading } = useGetAllClientsQuery();
   const [selectedRows, setSelectedRows] = useState(0);
   const [allClients, setAllClients] = useState(data);
@@ -14,6 +15,57 @@ const Clients = () => {
   console.log(data);
   console.log(error);
   console.log(isLoading);
+
+  const [filterModel, setFilterModel] = useState({
+    items: [
+      {
+        field: "id",
+        operator: "equals",
+        value: "",
+      },
+    ],
+  });
+
+  useEffect(() => {
+    if (location?.state && location?.state?.searchTerm) {
+      setFilterModel({
+        ...filterModel,
+        items: [
+          {
+            field: "id",
+            operator: "equals",
+            value: location?.state?.searchTerm
+              ? `${location?.state?.searchTerm}`
+              : "",
+          },
+        ],
+        quickFilterExcludeHiddenColumns: false,
+        quickFilterValues: location?.state?.searchTerm
+          ? [`${location?.state?.searchTerm}`]
+          : [""],
+      });
+    }
+
+    setAllClients(data);
+    console.log(data);
+  }, [location.state, data]);
+
+  const handleFilterModelChange = () => {
+    setFilterModel({
+      items: [
+        {
+          field: "id",
+          operator: "equals",
+          value: "",
+        },
+      ],
+    });
+  };
+
+  // useEffect(() => {
+  //   setAllClients(data);
+  //   console.log(data);
+  // }, [data])
 
   const switchStatus = (e, row) => {
     const updatedStaffs = allClients.map((staff) =>
@@ -99,6 +151,8 @@ const Clients = () => {
               },
             },
           }}
+          filterModel={filterModel}
+          onFilterModelChange={handleFilterModelChange}
           onRowSelectionModelChange={(rows, details) => {
             if (rows.length === 1) {
               setSelectedRow(details.api.getRowParams(rows[0]).row);
